@@ -3,27 +3,27 @@ import Link from "next/link";
 const Header = () => {
   return (
     <header>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div>
         <div className="flex justify-between items-center h-32">
-          <nav className="hidden sm:flex space-x-4">
+          <nav className="flex space-x-8">
             <Link
               href="/"
-              className="text-primary hover:text-secondary px-3 py-2 rounded-md text-sm font-medium"
+              className="text-primary hover:text-secondary py-2 rounded-md text-sm font-medium"
             >
               Home
             </Link>
             <Link
               href="/posts"
-              className="text-primary hover:text-secondary px-3 py-2 rounded-md text-sm font-medium"
+              className="text-primary hover:text-secondary py-2 rounded-md text-sm font-medium"
             >
               Posts
             </Link>
-            <Link
+            {/* <Link
               href="/about"
-              className="text-primary hover:text-secondary px-3 py-2 rounded-md text-sm font-medium"
+              className="text-primary hover:text-secondary py-2 rounded-md text-sm font-medium"
             >
               About
-            </Link>
+            </Link> */}
           </nav>
         </div>
       </div>
