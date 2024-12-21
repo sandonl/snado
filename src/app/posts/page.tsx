@@ -3,8 +3,8 @@ import { allPosts } from "content-collections";
 
 export default function BlogOverview() {
   return (
-    <div className="max-w-4xl mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">Blog Posts</h1>
+    <div>
+      <h1 className="text-3xl font-bold mb-8">Posts</h1>
       <div className="space-y-8">
         {allPosts.map((post) => (
           <article key={post._meta.path} className="border-b pb-8">

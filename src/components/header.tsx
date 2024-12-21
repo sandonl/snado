@@ -18,12 +18,6 @@ const Header = () => {
             >
               Posts
             </Link>
-            {/* <Link
-              href="/about"
-              className="text-primary hover:text-secondary py-2 rounded-md text-sm font-medium"
-            >
-              About
-            </Link> */}
           </nav>
         </div>
       </div>

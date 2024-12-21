@@ -29,7 +29,7 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#1b1b1b] max-w-2xl mx-auto px-4`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#1b1b1b] max-w-2xl mx-auto px-4 selection:bg-sky-300 selection:text-sky-900`}
         >
           <Header />
           {children}
