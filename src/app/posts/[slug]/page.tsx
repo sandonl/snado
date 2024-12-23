@@ -14,7 +14,7 @@ export default async function PostPage({
   }
 
   return (
-    <article className="py-6 prose prose-invert max-w-none">
+    <article className="py-6">
       <div className="mb-8">
         <h1 className="mb-2 text-4xl font-bold">{post.title}</h1>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -39,8 +39,8 @@ export default async function PostPage({
         </div>
       </div>
       <div
-        className="mt-8 prose prose-invert prose-headings:scroll-mt-20"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        className="mt-8 prose prose-invert prose-headings:scroll-mt-20 text-sm max-w-none"
+        dangerouslySetInnerHTML={{ __html: post.html }}
       />
     </article>
   );
