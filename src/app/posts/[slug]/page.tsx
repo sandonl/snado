@@ -38,11 +38,6 @@ export default async function PostPage({
           <div className="text-xs text-muted-foreground"> - {post.author}</div>
         </div>
       </div>
-      {/* <div
-        className="mt-8 prose prose-invert prose-headings:scroll-mt-20 text-sm max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.mdx }}
-      /> */}
-      {/* <post.mdx /> */}
       <div className="mt-8 prose prose-invert prose-headings:scroll-mt-20 text-sm max-w-none">
         <post.mdxContent />
       </div>

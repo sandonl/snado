@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="flex gap-4">
             <Link
               href="https://linkedin.com/in/sandonlai"
-              className="text-muted-foreground hover:text-primary text-sm"
+              className="text-muted-foreground hover:text-primary text-xs"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -16,7 +16,7 @@ export default function Footer() {
             </Link>
             <Link
               href="https://github.com/sandonl"
-              className="text-muted-foreground hover:text-primary text-sm"
+              className="text-muted-foreground hover:text-primary text-xs"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -24,7 +24,7 @@ export default function Footer() {
             </Link>
             <Link
               href="https://x.com/snads_build"
-              className="text-muted-foreground hover:text-primary text-sm"
+              className="text-muted-foreground hover:text-primary text-xs"
               target="_blank"
               rel="noopener noreferrer"
             >
