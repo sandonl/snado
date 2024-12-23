@@ -12,6 +12,7 @@ export default function Home() {
           <Link
             href="https://tilt.legal"
             className="text-zinc-400 hover:text-zinc-500"
+            target="_blank"
           >
             TILT Legal
           </Link>

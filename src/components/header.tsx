@@ -8,13 +8,13 @@ const Header = () => {
           <nav className="flex space-x-8">
             <Link
               href="/"
-              className="text-primary hover:text-secondary py-2 rounded-md text-sm font-medium"
+              className="text-primary hover:text-primary/80 py-2 rounded-md text-sm font-medium"
             >
               Home
             </Link>
             <Link
               href="/posts"
-              className="text-primary hover:text-secondary py-2 rounded-md text-sm font-medium"
+              className="text-primary hover:text-primary/80 py-2 rounded-md text-sm font-medium"
             >
               Posts
             </Link>
