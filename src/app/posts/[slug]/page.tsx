@@ -26,7 +26,7 @@ export default async function PostPage({
             })}
           </time>
           <div className="flex gap-2">
-            {post.tags.map((tag: string) => (
+            {post.tags.map((tag) => (
               <span
                 key={tag}
                 className="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs"

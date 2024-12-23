@@ -1,33 +1,35 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer>
       <div className="px-4 py-8">
         <div className="flex flex-col items-center gap-4">
           <div className="flex gap-4">
-            <a
+            <Link
               href="https://linkedin.com/in/sandonlai"
-              className="text-muted-foreground hover:text-primary"
+              className="text-muted-foreground hover:text-primary text-sm"
               target="_blank"
               rel="noopener noreferrer"
             >
               LinkedIn
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://github.com/sandonl"
-              className="text-muted-foreground hover:text-primary"
+              className="text-muted-foreground hover:text-primary text-sm"
               target="_blank"
               rel="noopener noreferrer"
             >
               GitHub
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://x.com/snads_build"
-              className="text-muted-foreground hover:text-primary"
+              className="text-muted-foreground hover:text-primary text-sm"
               target="_blank"
               rel="noopener noreferrer"
             >
               X
-            </a>
+            </Link>
           </div>
           <div className="text-center text-muted-foreground text-sm">
             © {new Date().getFullYear()} Sandon Lai. All rights reserved.
