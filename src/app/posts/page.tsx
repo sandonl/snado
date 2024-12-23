@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { allPosts } from "content-collections";
 import { Badge } from "@/components/ui/badge";
 
@@ -8,11 +8,11 @@ export default function BlogOverview() {
       <h1 className="text-3xl font-bold mb-8">Posts</h1>
       <div className="space-y-8">
         {allPosts.map((post) => (
-          <article key={post._meta.path} className="border-b pb-8">
+          <article key={post.slug} className="border-b pb-8">
             <div className="flex items-center justify-between">
               <Link
-                href={`/posts/${post._meta.path}`}
-                className="text-2xl font-semibold hover:underline"
+                href={`/posts/${post.slug}`}
+                className="text-2xl font-semibold hover:text-primary/80"
               >
                 {post.title}
               </Link>
@@ -28,7 +28,7 @@ export default function BlogOverview() {
             <div className="mt-4 flex gap-2">
               {post.tags.map((tag) => (
                 <Badge key={tag} variant="outline">
-                  #{tag}
+                  {tag}
                 </Badge>
               ))}
             </div>

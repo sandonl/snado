@@ -7,7 +7,7 @@ export default async function PostPage({
 }) {
   const slug = (await params).slug;
 
-  const post = allPosts.find((post) => post._meta.path === slug);
+  const post = allPosts.find((post) => post.slug === slug);
 
   if (!post) {
     notFound();
@@ -16,7 +16,7 @@ export default async function PostPage({
   return (
     <article className="py-6">
       <div className="mb-8">
-        <h1 className="mb-2 text-4xl font-bold">{post.title}</h1>
+        <h1 className="mb-2 text-3xl font-bold">{post.title}</h1>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <time dateTime={post.createdAt}>
             {new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -35,13 +35,17 @@ export default async function PostPage({
               </span>
             ))}
           </div>
-          <div className="text-sm text-muted-foreground">By {post.author}</div>
+          <div className="text-xs text-muted-foreground"> - {post.author}</div>
         </div>
       </div>
-      <div
+      {/* <div
         className="mt-8 prose prose-invert prose-headings:scroll-mt-20 text-sm max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.html }}
-      />
+        dangerouslySetInnerHTML={{ __html: post.mdx }}
+      /> */}
+      {/* <post.mdx /> */}
+      <div className="mt-8 prose prose-invert prose-headings:scroll-mt-20 text-sm max-w-none">
+        <post.mdxContent />
+      </div>
     </article>
   );
 }
