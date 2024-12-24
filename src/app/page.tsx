@@ -1,10 +1,13 @@
+import LetterSwapPingPong from "@/components/letter-swap-ping-pong";
 import { Link } from "next-view-transitions";
 
 export default function Home() {
   return (
     <div className="min-h-48 border-b pb-8">
       <div className="flex flex-col gap-6">
-        <h1 className="text-3xl font-bold">About</h1>
+        <div className="flex pb-3">
+          <LetterSwapPingPong label="About" className="text-3xl font-bold" />
+        </div>
         <p className="text-sm">Hi,</p>
         <p className="text-sm">
           I&apos;m a software engineer living in Melbourne, Australia and

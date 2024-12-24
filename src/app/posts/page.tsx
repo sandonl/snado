@@ -1,11 +1,14 @@
 import { Link } from "next-view-transitions";
 import { allPosts } from "content-collections";
 import { Badge } from "@/components/ui/badge";
+import LetterSwapPingPong from "@/components/letter-swap-ping-pong";
 
 export default function BlogOverview() {
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8">Posts</h1>
+      <div className="flex pb-8">
+        <LetterSwapPingPong label="Posts" className="text-3xl font-bold" />
+      </div>
       <div className="space-y-8">
         {allPosts.map((post) => (
           <article key={post.slug} className="border-b pb-8">
