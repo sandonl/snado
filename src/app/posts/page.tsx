@@ -15,7 +15,7 @@ export default function BlogOverview() {
             <div className="flex items-center justify-between">
               <Link
                 href={`/posts/${post.slug}`}
-                className="text-2xl font-semibold hover:text-primary/80"
+                className="text-xl font-semibold hover:text-primary/80"
               >
                 {post.title}
               </Link>
@@ -27,7 +27,7 @@ export default function BlogOverview() {
                 })}
               </p>
             </div>
-            <p className="mt-2">{post.summary}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{post.summary}</p>
             <div className="mt-4 flex gap-2">
               {post.tags.map((tag) => (
                 <Badge key={tag} variant="outline">
