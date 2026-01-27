@@ -16,10 +16,23 @@ export const Route = createRootRoute({
       { name: 'description', content: "Sandon Lai's personal website" }
     ]
   }),
-  component: RootLayout
+  component: RootLayout,
+  notFoundComponent: () => (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">Page not found</h1>
+    </div>
+  )
 })
 
 function RootLayout() {
+  return (
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
+  )
+}
+
+function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -30,7 +43,7 @@ function RootLayout() {
       </head>
       <body className="font-sans antialiased bg-[#1b1b1b] max-w-2xl mx-auto px-4 selection:bg-sky-300 selection:text-sky-900">
         <Header />
-        <Outlet />
+        {children}
         <Footer />
         <Analytics />
       </body>

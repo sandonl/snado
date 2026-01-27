@@ -20,7 +20,7 @@ const posts = defineCollection({
   }),
   transform: ({ _meta, ...post }) => {
     const mdxContent = createDefaultImport<MDXContent>(
-      `@/posts/${_meta.filePath}`
+      `./src/posts/${_meta.filePath}`
     );
     return {
       ...post,

@@ -1,4 +1,4 @@
-import { Link } from "next-view-transitions";
+import { Link } from '@tanstack/react-router';
 
 const Header = () => {
   return (
@@ -7,13 +7,13 @@ const Header = () => {
         <div className="flex justify-between items-center h-32">
           <nav className="flex space-x-8">
             <Link
-              href="/"
+              to="/"
               className="text-primary hover:text-primary/80 py-2 rounded-md text-sm font-medium"
             >
               Home
             </Link>
             <Link
-              href="/posts"
+              to="/posts"
               className="text-primary hover:text-primary/80 py-2 rounded-md text-sm font-medium"
             >
               Posts
