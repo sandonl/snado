@@ -1,5 +1,12 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { allPosts } from 'content-collections'
+import { MDXContent } from '@content-collections/mdx/react'
+import { Quote } from '@/components/ui/quote'
+
+// Custom components available in MDX files
+const mdxComponents = {
+  Quote,
+}
 
 export const Route = createFileRoute('/posts/$slug')({
   loader: ({ params }) => {
@@ -47,7 +54,7 @@ function PostPage() {
         </div>
       </div>
       <div className="mt-8 prose prose-invert prose-headings:scroll-mt-20 text-sm max-w-none">
-        <post.mdxContent />
+        <MDXContent code={post.mdx} components={mdxComponents} />
       </div>
     </article>
   )

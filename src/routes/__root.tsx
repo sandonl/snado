@@ -1,11 +1,11 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Analytics } from '@vercel/analytics/react'
 import '@fontsource/geist-sans/400.css'
 import '@fontsource/geist-sans/700.css'
 import '@fontsource/geist-mono/400.css'
-import '../app/globals.css'
+import appCss from '../app/globals.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -14,6 +14,9 @@ export const Route = createRootRoute({
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { title: 'Sandon Lai' },
       { name: 'description', content: "Sandon Lai's personal website" }
+    ],
+    links: [
+      { rel: 'stylesheet', href: appCss }
     ]
   }),
   component: RootLayout,
@@ -36,16 +39,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Sandon Lai</title>
-        <meta name="description" content="Sandon Lai's personal website" />
+        <HeadContent />
       </head>
       <body className="font-sans antialiased bg-[#1b1b1b] max-w-2xl mx-auto px-4 selection:bg-sky-300 selection:text-sky-900">
         <Header />
         {children}
         <Footer />
         <Analytics />
+        <Scripts />
       </body>
     </html>
   )
