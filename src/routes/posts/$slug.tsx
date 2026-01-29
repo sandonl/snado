@@ -1,18 +1,33 @@
-import { allPosts } from "content-collections";
-import { notFound } from "next/navigation";
-export default async function PostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const slug = (await params).slug;
+import { createFileRoute, notFound } from '@tanstack/react-router'
+import { allPosts } from 'content-collections'
+import { MDXContent } from '@content-collections/mdx/react'
+import { Quote } from '@/components/ui/quote'
 
-  const post = allPosts.find((post) => post.slug === slug);
+// Custom components available in MDX files
+const mdxComponents = {
+  Quote,
+}
 
-  if (!post) {
-    notFound();
-  }
+export const Route = createFileRoute('/posts/$slug')({
+  loader: ({ params }) => {
+    const post = allPosts.find((p) => p.slug === params.slug)
+    if (!post) {
+      throw notFound()
+    }
+    return { post }
+  },
+  component: PostPage,
+  notFoundComponent: () => (
+    <div className="py-6">
+      <h1 className="text-2xl font-bold">Post not found</h1>
+      <p className="mt-2 text-muted-foreground">The requested post does not exist.</p>
+    </div>
+  )
+})
 
+function PostPage() {
+  const { post } = Route.useLoaderData()
+  
   return (
     <article className="py-6">
       <div className="mb-8">
@@ -39,8 +54,8 @@ export default async function PostPage({
         </div>
       </div>
       <div className="mt-8 prose prose-invert prose-headings:scroll-mt-20 text-sm max-w-none">
-        <post.mdxContent />
+        <MDXContent code={post.mdx} components={mdxComponents} />
       </div>
     </article>
-  );
+  )
 }

@@ -1,9 +1,13 @@
-import { Link } from "next-view-transitions";
-import { allPosts } from "content-collections";
-import { Badge } from "@/components/ui/badge";
-import LetterSwapPingPong from "@/components/letter-swap-ping-pong";
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { allPosts } from 'content-collections'
+import { Badge } from '@/components/ui/badge'
+import LetterSwapPingPong from '@/components/letter-swap-ping-pong'
 
-export default function BlogOverview() {
+export const Route = createFileRoute('/posts/')({
+  component: PostsPage
+})
+
+function PostsPage() {
   return (
     <div>
       <div className="flex pb-8">
@@ -14,7 +18,8 @@ export default function BlogOverview() {
           <article key={post.slug} className="border-b pb-8">
             <div className="flex items-center justify-between">
               <Link
-                href={`/posts/${post.slug}`}
+                to="/posts/$slug"
+                params={{ slug: post.slug }}
                 className="text-xl font-semibold hover:text-primary/80"
               >
                 {post.title}
@@ -39,5 +44,5 @@ export default function BlogOverview() {
         ))}
       </div>
     </div>
-  );
+  )
 }

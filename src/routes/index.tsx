@@ -1,7 +1,11 @@
-import LetterSwapPingPong from "@/components/letter-swap-ping-pong";
-import { Link } from "next-view-transitions";
+import { createFileRoute, Link } from '@tanstack/react-router'
+import LetterSwapPingPong from '@/components/letter-swap-ping-pong'
 
-export default function Home() {
+export const Route = createFileRoute('/')({
+  component: HomePage
+})
+
+function HomePage() {
   return (
     <div className="min-h-48 border-b pb-8">
       <div className="flex flex-col gap-6">
@@ -12,13 +16,14 @@ export default function Home() {
         <p className="text-sm">
           I&apos;m a software engineer living in Melbourne, Australia and
           currently work at{" "}
-          <Link
+          <a
             href="https://tilt.legal"
             className="text-zinc-400 hover:text-zinc-500"
             target="_blank"
+            rel="noopener noreferrer"
           >
             TILT Legal
-          </Link>
+          </a>
           . Currently I&apos;m working on making tools and products for legal
           professionals.
         </p>
@@ -29,12 +34,12 @@ export default function Home() {
         <p className="text-sm">
           To find out more about my professional journey and interests, feel
           free to explore my{" "}
-          <Link href="/posts" className="text-zinc-400 hover:text-zinc-500">
+          <Link to="/posts" className="text-zinc-400 hover:text-zinc-500">
             written works
           </Link>{" "}
           and various social media profiles.
         </p>
       </div>
     </div>
-  );
+  )
 }

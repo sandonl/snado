@@ -1,15 +1,10 @@
-import {
-  createDefaultImport,
-  defineCollection,
-  defineConfig,
-} from "@content-collections/core";
-import { MDXContent } from "mdx/types";
+import { defineCollection, defineConfig } from "@content-collections/core";
+import { compileMDX } from "@content-collections/mdx";
 
 const posts = defineCollection({
   name: "posts",
   directory: "src/posts",
   include: "**/*.mdx",
-  parser: "frontmatter-only",
   schema: (z) => ({
     title: z.string(),
     summary: z.string(),
@@ -18,13 +13,11 @@ const posts = defineCollection({
     tags: z.array(z.string()),
     slug: z.string(),
   }),
-  transform: ({ _meta, ...post }) => {
-    const mdxContent = createDefaultImport<MDXContent>(
-      `@/posts/${_meta.filePath}`
-    );
+  transform: async (document, context) => {
+    const mdx = await compileMDX(context, document);
     return {
-      ...post,
-      mdxContent,
+      ...document,
+      mdx,
     };
   },
 });

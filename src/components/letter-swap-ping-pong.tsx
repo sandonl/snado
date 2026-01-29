@@ -6,8 +6,10 @@ import {
   motion,
   DynamicAnimationOptions,
 } from "motion/react";
-import { debounce } from "lodash";
+import lodash from "lodash";
 import { useState } from "react";
+
+const { debounce } = lodash;
 
 interface TextProps {
   label: string;
