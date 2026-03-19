@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import LetterSwapPingPong from '@/components/letter-swap-ping-pong'
+import ShaderHero from '@/components/shader-hero'
 
 export const Route = createFileRoute('/')({
   component: HomePage
@@ -8,6 +9,9 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   return (
     <div className="min-h-48 border-b pb-8">
+      <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen mb-12">
+        <ShaderHero />
+      </div>
       <div className="flex flex-col gap-6">
         <div className="flex pb-3">
           <LetterSwapPingPong label="About" className="text-3xl font-bold" />
