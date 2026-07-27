@@ -41,7 +41,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="font-sans antialiased bg-[#1b1b1b] max-w-2xl mx-auto px-4 selection:bg-sky-300 selection:text-sky-900">
+      <body className="font-sans antialiased bg-[#1b1b1b] max-w-2xl mx-auto overflow-x-hidden px-4 selection:bg-sky-300 selection:text-sky-900">
         <Header />
         {children}
         <Footer />

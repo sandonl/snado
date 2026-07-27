@@ -8,13 +8,18 @@ export const Route = createFileRoute('/posts/')({
 })
 
 function PostsPage() {
+  const posts = [...allPosts].sort(
+    (a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  )
+
   return (
     <div>
       <div className="flex pb-8">
         <LetterSwapPingPong label="Posts" className="text-3xl font-bold" />
       </div>
       <div className="space-y-8">
-        {allPosts.map((post) => (
+        {posts.map((post) => (
           <article key={post.slug} className="border-b pb-8">
             <div className="flex items-center justify-between">
               <Link
