@@ -1,17 +1,17 @@
 ---
-title: "How we used Effect.ts to review thousands of agreements"
+title: "Effect.ts for high-throughput AI document review"
 summary: "A practical look at building a concurrent, rate-limited AI pipeline in TypeScript with Effect, covering dependency injection, typed errors, semaphores, and observability at scale."
-createdAt: "2026-04-13"
+createdAt: "2026-05-22"
 tags: ["Engineering", "Effect", "AI"]
 author: "Sandon Lai"
 slug: "how-we-used-effect-ts-to-review-1000s-of-agreements"
 ---
 
-We were tasked to review and classify thousands of land registry lease agreements. Not skim them - actually classify insurance obligations across several dimensions, and extract structured data from each document.
+We were tasked to review and classify thousands of land registry lease agreements. It required actually classifying insurance obligations across several dimensions, and extract structured data from each document.
 
-You can throw together a script that does this for one lease in an afternoon. However, scaling it to thousands and the problem stops being about AI and starts being about systems: concurrency, rate limits, observability, and enough reliability that a single bad document doesn't take the rest of the batch down with it.
+You can throw together a script that does this for one lease in an afternoon. However, scaling it to thousands and the problem stops being about AI and starts being about systems - concurrency, rate limits, observability, and enough reliability that a single bad document doesn't take the rest of the batch down with it.
 
-We built it with [Effect](https://effect.website/) - a toolkit for keeping complex software reliable as it scales. What follows is a walk through the problems we hit, and how Effect helped us navigate each one.
+We built it with [Effect](https://effect.website/) - a toolkit for keeping complex software reliable as it scales. What follows is a walkthrough the problems we hit, and how Effect showed us avenues of solving each one.
 
 ## The Pipeline
 
@@ -19,15 +19,15 @@ Each lease moves through a multi-step workflow. First we extract the key facts f
 
 Under the hood it's more than "call an LLM a few times." The pipeline reads files, calls LLMs, applies pathed business logic, emits structured outputs - half a dozen moving parts that need to compose cleanly.
 
-## Dependency Injection Without the Magic
+## Dependency Injection
 
 You could prove out a pipeline like this with plain TypeScript or Python. We tried the shape of that early on. It works until the interleaving parts start multiplying, and then quickly it becomes a highly dependant script on individual parts working correctly.
 
-We weren't starting from scratch. Our internal platform, [Mobius](https://tilt.legal/mobius), already had the building blocks we reuse across every AI pipeline we ship: blob storage, model calls, prompt management, document export, browser-based scraping. The question wasn't *what* to use. It was how to plug it all in without causing coupling of failures to bring the review system down.
+Our internal platform, [Mobius](https://tilt.legal/mobius), already had the building blocks we reuse across every AI pipeline we ship: blob storage, model calls, prompt management, document export, browser-based scraping. The question wasn't *what* to use. It was how to plug it all in without causing coupling of failures to bring the review system down.
 
 Effect's layer system did a lot of the heavy lifting here. Our pipeline declares the services it needs. A `Live` layer wires in Mobius' implementations. Effect's `yield*` makes it easy to surface the correct layer at it's appropriate runtime. No adapters. No refactoring to fit for 'testing' vs 'live' run. Effect services with declared dependencies and error types makes it easy to reason about the system.
 
-The model service is the clearest example. Swapping LLM providers is a layer swap. Gemini today, OpenAI tomorrow - swap the layer. One model for structured extraction, a cheaper one for simple classification - compose the layers differently. A new model drops and we change a model ID and a name. That's it. The pipeline runs on it without touching anything else.
+The model service is the clearest example. Swapping LLM providers is a layer swap. A new model drops and we change a model ID and a name. That's it. The pipeline runs on it without touching anything else.
 
 This matters because the LLM landscape shifts weekly. New models, new pricing, outages, different strengths for different tasks. Being able to swap without a refactor means we can react without a rewrite. It also means we can run the same workflow twice with different model layers and compare providers side by side.
 
@@ -51,17 +51,15 @@ const result = yield* geminiSemaphore.withPermits(1)(
 
 `Effect.makeSemaphore` creates a permit pool. Each LLM call wraps itself with `withPermits(1)`: it acquires a permit before executing and releases it when done.
 
-Item-level concurrency and API-level concurrency become separate dials. A few lines of code, no custom queue, no third-party rate limiter.
-
 To put numbers on it: a lease takes about 59 seconds end-to-end, median closer to 40. Across 1,450 leases, concurrency was the difference between a 24-hour run and a 2-hour one. Throttling and per-call timeouts aren't optimisation. They're what stops one stuck LLM call from holding up the whole batch.
 
-## Error Handling That the Compiler Actually Enforces
+## Error Handling
 
 In most Node codebases, errors are a loose end. You `throw`, you `catch`, and what the difficulty is usually this results in a larger try catch clause where it becomes difficult to reason about what errors are being thrown and how they should be handled. Should a failure to resolve a file cause the entire system to stop? Probably not. Should the error be swallowed and the system continue running? Probably not as well. TypeScripts' system doesn't help much: `catch` hands you `unknown`, and there's no way to know at the call site what a function can actually fail with.
 
 Effect takes the opposite stance. Every service method in our pipeline declares its error types explicitly using `Schema.TaggedError`. Each error is a discriminated union member with a `_tag` field and structured context.
 
-When you use `Effect.catchTags` to handle errors, the compiler checks exhaustiveness. You are able to add error types to a step, and every handler upstream that catches errors from that step fails to compile until it's updated. Forgotten cases get caught at build time instead of in production. 
+When you use `Effect.catchTags` to handle errors, the compiler checks exhaustiveness. You are able to add error types to a step, and every handler upstream that catches errors from that step fails to compile until it's updated. Forgotten cases get caught at build time instead of in production.
 
 What this allows for is a greater fidelity in how you handle errors and what actions you want to take when they occur.
 
@@ -80,16 +78,16 @@ Because every error is tagged, we can handle different kinds of errors different
 
 A nice side effect of building this in Effect is that we got most of the observability without asking for it.
 
-`Effect.withSpan` on every service method gives us distributed traces across every workflow step. When a lease takes 20 minutes instead of the usual ~50 seconds, we can see which step was slow.
+`Effect.withSpan` on every service method gives us distributed traces across every workflow step. When a lease takes 20 minutes instead of the usual ~50 seconds, we are able to quickly see which step was slow.
 
 `Effect.annotateLogs` attaches structured context to every log line, so logs are queryable rather than a pile of strings to grep through.
 
-We also run Langfuse for evaluation. Every LLM call is traced, so we can replay changes to prompts, models, or classification logic against a curated ground-truth set and see whether accuracy moves in the right direction *before* rolling anything out to the full batch.
+We also have a hosted LangFuse deployment for evaluation. Every LLM call is traced, so we can replay changes to prompts, models, or classification logic against a curated ground-truth set and see whether accuracy moves in the right direction *before* rolling anything out to the full batch.
 
 ## Wrapping Up
 
 The end result is a system where we can run thousands of documents through the pipeline and get reliable results. Individual failures are captured rather than catastrophic. Concurrency is controlled at the right level. Steps are testable without burning LLM tokens. When something does go wrong, the logs and traces make it reasonably easy to figure out what happened.
 
-Typed errors mean failures can't slip through unhandled. Layers mean dependencies are explicit and swappable. Semaphores mean concurrency is controlled and throttled accordingly.
+Typed errors mean failures can't slip through unhandled. Layers mean dependencies are explicit and swappable. Semaphores mean concurrency is controlled rather than hoped for.
 
-The broader point is that reliable AI pipelines aren't really AI problems. They're systems problems. A single LLM call is a few lines of code. A pipeline running thousands of them reliably is a distributed system with retry semantics, rate limits, partial failure modes, and an observability story. Most of the work worth doing sits in the second category, and Effect is what let us spend our time there.
+The broader point is that reliable AI pipelines aren't really AI problems - they're systems problems. A single LLM call is a few lines of code. A pipeline running thousands of them reliably is a distributed system with retry semantics, rate limits, partial failure modes, and an observability story. Most of the work worth doing sits in the second category, and Effect is what let us spend our time there.
