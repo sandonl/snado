@@ -26,7 +26,7 @@ function HomePage() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            TILT Legal
+            Tilt legal
           </a>
           . Currently I&apos;m working on making tools and products for legal
           professionals.
