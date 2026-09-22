@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import LetterSwapPingPong from '@/components/letter-swap-ping-pong'
 
-// Three homepage project-section variants, switchable with ?variant=a|b|c.
+// Three variants of the dedicated projects page, switchable with ?variant=a|b|c.
 const variants = ['a', 'b', 'c'] as const
 type Variant = (typeof variants)[number]
 
@@ -149,12 +149,12 @@ export default function ProjectsSectionPrototype() {
   const SelectedVariant = variantDetails[variant].component
 
   return (
-    <section className="border-b py-10">
-      <div className="mb-6 flex pb-3">
+    <main className="min-h-[calc(100vh-16rem)] border-b pb-12 pt-8">
+      <div className="mb-12 flex pb-3">
         <LetterSwapPingPong label="Projects" className="text-3xl font-bold" />
       </div>
       <SelectedVariant />
       <PrototypeSwitcher current={variant} onChange={selectVariant} />
-    </section>
+    </main>
   )
 }
