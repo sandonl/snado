@@ -27,7 +27,7 @@ const projects: ReadonlyArray<Project> = [
     name: 'Quarry',
     category: 'Korean learning',
     description:
-      'A private Korean-learning app that turns recent YouTube conversations into daily lessons. Its authenticated MCP lets an AI inspect lesson context, manage a personal word bank and run spaced-repetition reviews while Quarry keeps control of identity, permissions and scheduling.',
+      'A private Korean-learning app that turns recent YouTube conversations into daily lessons. Alchemy provisions a Cloudflare stack where one Worker serves the React app and API, D1 stores lessons and review state, and a durable Workflow handles video analysis and daily generation. Its authenticated MCP lets an AI inspect lesson context, manage a personal word bank and run spaced-repetition reviews while Quarry keeps control of identity, permissions and scheduling.',
     exposure: 'private'
   }
 ]
