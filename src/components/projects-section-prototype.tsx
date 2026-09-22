@@ -9,7 +9,6 @@ const project = {
   name: 'Eve Korean Tutor',
   description:
     'A personal Korean tutor with long-term learning memory, sentence mining and daily Telegram lessons.',
-  liveUrl: 'https://eve-kr-tutor.vercel.app',
   sourceUrl: 'https://github.com/sandonl/eve-kr-tutor'
 }
 
@@ -41,7 +40,6 @@ function VariantA() {
           </p>
         </div>
         <div className="flex shrink-0 gap-4 text-xs sm:pt-1">
-          <ProjectLink href={project.liveUrl}>Live ↗</ProjectLink>
           <ProjectLink href={project.sourceUrl}>GitHub ↗</ProjectLink>
         </div>
       </div>
@@ -63,7 +61,6 @@ function VariantB() {
         {project.description}
       </p>
       <div className="flex gap-5 text-xs">
-        <ProjectLink href={project.liveUrl}>Open project ↗</ProjectLink>
         <ProjectLink href={project.sourceUrl}>View source ↗</ProjectLink>
       </div>
     </article>
@@ -79,7 +76,6 @@ function VariantC() {
         <p className="max-w-md text-xs leading-5 text-zinc-400">{project.description}</p>
       </div>
       <div className="col-start-2 mt-4 flex gap-4 text-xs sm:col-start-3 sm:row-start-1 sm:mt-0">
-        <ProjectLink href={project.liveUrl}>Visit ↗</ProjectLink>
         <ProjectLink href={project.sourceUrl}>Code ↗</ProjectLink>
       </div>
     </article>
