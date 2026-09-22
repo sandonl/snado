@@ -5,12 +5,32 @@ import LetterSwapPingPong from '@/components/letter-swap-ping-pong'
 const variants = ['a', 'b', 'c'] as const
 type Variant = (typeof variants)[number]
 
-const project = {
-  name: 'Eve Korean Tutor',
-  description:
-    'A personal Korean tutor with long-term learning memory, sentence mining and daily Telegram lessons.',
-  sourceUrl: 'https://github.com/sandonl/eve-kr-tutor'
-}
+type Project = {
+  name: string
+  category: string
+  description: string
+} & (
+  | { exposure: 'public'; sourceUrl: string }
+  | { exposure: 'private' }
+)
+
+const projects: ReadonlyArray<Project> = [
+  {
+    name: 'Eve Korean Tutor',
+    category: 'Language learning',
+    description:
+      'A personal Korean tutor with long-term learning memory, sentence mining and daily Telegram lessons.',
+    exposure: 'public',
+    sourceUrl: 'https://github.com/sandonl/eve-kr-tutor'
+  },
+  {
+    name: 'Quarry',
+    category: 'Korean learning',
+    description:
+      'A private Korean-learning app that turns recent YouTube conversations into daily lessons. Its authenticated MCP lets an AI inspect lesson context, manage a personal word bank and run spaced-repetition reviews while Quarry keeps control of identity, permissions and scheduling.',
+    exposure: 'private'
+  }
+]
 
 function isVariant(value: string | null): value is Variant {
   return variants.some((variant) => variant === value)
@@ -29,56 +49,72 @@ function ProjectLink({ href, children }: { href: string; children: React.ReactNo
   )
 }
 
+function ProjectSourceLink({ project }: { project: Project }) {
+  if (project.exposure === 'private') return null
+  return <ProjectLink href={project.sourceUrl}>GitHub ↗</ProjectLink>
+}
+
 function VariantA() {
   return (
-    <article className="border-t border-zinc-800 py-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
-        <div className="space-y-2">
-          <h3 className="text-base font-bold text-zinc-100">{project.name}</h3>
-          <p className="max-w-lg text-sm leading-6 text-zinc-400">
-            {project.description}
-          </p>
-        </div>
-        <div className="flex shrink-0 gap-4 text-xs sm:pt-1">
-          <ProjectLink href={project.sourceUrl}>GitHub ↗</ProjectLink>
-        </div>
-      </div>
-    </article>
+    <div>
+      {projects.map((project) => (
+        <article key={project.name} className="border-t border-zinc-800 py-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+            <div className="space-y-2">
+              <h3 className="text-base font-bold text-zinc-100">{project.name}</h3>
+              <p className="max-w-lg text-sm leading-6 text-zinc-400">
+                {project.description}
+              </p>
+            </div>
+            <div className="flex shrink-0 gap-4 text-xs sm:pt-1">
+              <ProjectSourceLink project={project} />
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
   )
 }
 
 function VariantB() {
   return (
-    <article className="rounded-lg border border-zinc-700 bg-zinc-900/60 p-6">
-      <div className="mb-8 flex items-center justify-between">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-sky-300">
-          Language learning
-        </span>
-        <span className="h-2 w-2 rounded-full bg-emerald-400" aria-label="Live" />
-      </div>
-      <h3 className="mb-2 text-xl font-bold text-zinc-100">{project.name}</h3>
-      <p className="mb-6 max-w-lg text-sm leading-6 text-zinc-400">
-        {project.description}
-      </p>
-      <div className="flex gap-5 text-xs">
-        <ProjectLink href={project.sourceUrl}>View source ↗</ProjectLink>
-      </div>
-    </article>
+    <div className="grid gap-4 sm:grid-cols-2">
+      {projects.map((project) => (
+        <article key={project.name} className="flex flex-col rounded-lg border border-zinc-700 bg-zinc-900/60 p-6">
+          <span className="mb-8 font-mono text-[10px] uppercase tracking-[0.2em] text-sky-300">
+            {project.category}
+          </span>
+          <h3 className="mb-2 text-xl font-bold text-zinc-100">{project.name}</h3>
+          <p className="mb-6 flex-1 text-sm leading-6 text-zinc-400">
+            {project.description}
+          </p>
+          <div className="flex gap-5 text-xs">
+            <ProjectSourceLink project={project} />
+          </div>
+        </article>
+      ))}
+    </div>
   )
 }
 
 function VariantC() {
   return (
-    <article className="grid grid-cols-[3rem_1fr] border-y border-zinc-800 py-6 sm:grid-cols-[5rem_1fr_auto]">
-      <span className="font-mono text-xs text-zinc-600">01</span>
-      <div>
-        <h3 className="mb-2 text-sm font-bold text-zinc-100">{project.name}</h3>
-        <p className="max-w-md text-xs leading-5 text-zinc-400">{project.description}</p>
-      </div>
-      <div className="col-start-2 mt-4 flex gap-4 text-xs sm:col-start-3 sm:row-start-1 sm:mt-0">
-        <ProjectLink href={project.sourceUrl}>Code ↗</ProjectLink>
-      </div>
-    </article>
+    <div className="border-t border-zinc-800">
+      {projects.map((project, index) => (
+        <article key={project.name} className="grid grid-cols-[3rem_1fr] border-b border-zinc-800 py-6 sm:grid-cols-[5rem_1fr_auto]">
+          <span className="font-mono text-xs text-zinc-600">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <div>
+            <h3 className="mb-2 text-sm font-bold text-zinc-100">{project.name}</h3>
+            <p className="max-w-md text-xs leading-5 text-zinc-400">{project.description}</p>
+          </div>
+          <div className="col-start-2 mt-4 flex gap-4 text-xs sm:col-start-3 sm:row-start-1 sm:mt-0">
+            <ProjectSourceLink project={project} />
+          </div>
+        </article>
+      ))}
+    </div>
   )
 }
 
