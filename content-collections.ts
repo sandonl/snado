@@ -1,5 +1,6 @@
 import { defineCollection, defineConfig } from "@content-collections/core";
 import { compileMDX } from "@content-collections/mdx";
+import rehypeShiki from "@shikijs/rehype";
 
 const posts = defineCollection({
   name: "posts",
@@ -14,7 +15,9 @@ const posts = defineCollection({
     slug: z.string(),
   }),
   transform: async (document, context) => {
-    const mdx = await compileMDX(context, document);
+    const mdx = await compileMDX(context, document, {
+      rehypePlugins: [[rehypeShiki, { theme: "github-dark" }]],
+    });
     return {
       ...document,
       mdx,

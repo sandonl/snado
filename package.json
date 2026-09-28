@@ -39,6 +39,7 @@
     "@content-collections/vite": "^0.2.8",
     "@eslint/eslintrc": "^3",
     "@mdx-js/rollup": "^3.1.1",
+    "@shikijs/rehype": "^4.4.3",
     "@tailwindcss/typography": "^0.5.15",
     "@types/lodash": "^4.17.13",
     "@types/node": "^20",
