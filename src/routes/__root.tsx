@@ -16,7 +16,10 @@ export const Route = createRootRoute({
       { name: 'description', content: "Sandon Lai's personal website" }
     ],
     links: [
-      { rel: 'stylesheet', href: appCss }
+      { rel: 'stylesheet', href: appCss },
+      { rel: 'icon', href: '/favicon.ico?v=2', sizes: '16x16 32x32 48x48' },
+      { rel: 'icon', href: '/favicon.png?v=2', type: 'image/png', sizes: '192x192' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }
     ]
   }),
   component: RootLayout,
