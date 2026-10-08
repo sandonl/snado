@@ -38,6 +38,15 @@ function ProjectsPage() {
             </p>
           </div>
         </article>
+        <article className="grid grid-cols-[3rem_1fr] border-b border-zinc-800 py-6 sm:grid-cols-[5rem_1fr]">
+          <span className="font-mono text-xs text-zinc-600">03</span>
+          <div>
+            <h2 className="mb-2 text-sm font-bold text-zinc-100">ROVE</h2>
+            <p className="max-w-md text-xs leading-5 text-zinc-400">
+              A browser-based 3D Aussie rules game built with TypeScript, Three.js, Blender and Colyseus.
+            </p>
+          </div>
+        </article>
       </div>
     </main>
   )
