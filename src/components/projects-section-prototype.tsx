@@ -27,7 +27,7 @@ const projects: ReadonlyArray<Project> = [
     name: 'Quarry',
     category: 'Korean learning',
     description:
-      'A private Korean-learning app built with Alchemy on Cloudflare Workers, D1 and Workflows. Its secure MCP lets AI assistants work with lessons, saved vocabulary and spaced-repetition reviews.',
+      'A private Korean-learning app built with Alchemy on Cloudflare Workers, D1 and Workflows, with Better Auth handling Google sign-in and user sessions. Its secure MCP lets AI assistants work with lessons, saved vocabulary and spaced-repetition reviews.',
     exposure: 'private'
   }
 ]
@@ -101,16 +101,23 @@ function VariantC() {
   return (
     <div className="border-t border-zinc-800">
       {projects.map((project, index) => (
-        <article key={project.name} className="grid grid-cols-[3rem_1fr] border-b border-zinc-800 py-6 sm:grid-cols-[5rem_1fr_auto]">
+        <article key={project.name} className="grid grid-cols-[3rem_1fr] border-b border-zinc-800 py-6 sm:grid-cols-[5rem_1fr]">
           <span className="font-mono text-xs text-zinc-600">
             {String(index + 1).padStart(2, '0')}
           </span>
           <div>
             <h3 className="mb-2 text-sm font-bold text-zinc-100">{project.name}</h3>
             <p className="max-w-md text-xs leading-5 text-zinc-400">{project.description}</p>
-          </div>
-          <div className="col-start-2 mt-4 flex gap-4 text-xs sm:col-start-3 sm:row-start-1 sm:mt-0">
-            <ProjectSourceLink project={project} />
+            {project.exposure === 'public' && (
+              <a
+                href={project.sourceUrl}
+                className="mt-3 inline-block rounded-sm text-xs leading-5 text-zinc-400 underline decoration-zinc-700 underline-offset-4 transition-colors hover:text-zinc-200 hover:decoration-zinc-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-400"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on GitHub
+              </a>
+            )}
           </div>
         </article>
       ))}
