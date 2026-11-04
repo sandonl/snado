@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Snado
 
-## Getting Started
+Sandon’s personal website: a little about me, the projects I’m building, and posts on software, AI and language learning.
 
-First, run the development server:
+Built with React, TypeScript, TanStack Start and Vite. Styling uses Tailwind CSS, and posts are written in MDX and compiled with Content Collections.
+
+## Run locally
+
+Use Node.js compatible with Vite 7 and pnpm 10.14.0 (pinned in `package.json`).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the local URL printed by Vite.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Useful commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm build       # Build the site
+pnpm preview     # Preview the production build locally
+pnpm type-check  # Check TypeScript types
+```
 
-## Learn More
+## Where things live
 
-To learn more about Next.js, take a look at the following resources:
+- `src/routes/` — home, projects and post pages.
+- `src/posts/` — MDX posts.
+- `src/components/` — shared UI and visual effects.
+- `src/app/globals.css` — global styles.
+- `public/` — images, icons and other static files.
+- `content-collections.ts` — post metadata and MDX compilation.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Add a post
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create an `.mdx` file in `src/posts/` with this frontmatter, followed by the post content:
 
-## Deploy on Vercel
+```mdx
+---
+title: "My new post"
+summary: "A short description for the posts page."
+createdAt: "2026-11-04"
+author: "Sandon L"
+tags: ["Software"]
+slug: "my-new-post"
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Write the post here.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The post appears at `/posts/my-new-post`. Use a unique slug; the posts page lists entries newest first.
