@@ -6,11 +6,11 @@ Built with React, TypeScript, TanStack Start and Vite. Styling uses Tailwind CSS
 
 ## Run locally
 
-Use Node.js compatible with Vite 7 and pnpm 10.14.0 (pinned in `package.json`).
+Use [Bun](https://bun.sh/) 1.4.3 (pinned in `package.json`) and Node.js compatible with Vite 7.
 
 ```bash
-pnpm install
-pnpm dev
+bun install
+bun run dev
 ```
 
 Open the local URL printed by Vite.
@@ -18,10 +18,12 @@ Open the local URL printed by Vite.
 ## Useful commands
 
 ```bash
-pnpm build       # Build the site
-pnpm preview     # Preview the production build locally
-pnpm type-check  # Check TypeScript types
+bun run build       # Build the site
+bun run preview     # Preview the production build locally
+bun run type-check  # Check TypeScript types
 ```
+
+Commit `bun.lock` when dependencies change. For a reproducible install, use `bun install --frozen-lockfile`.
 
 ## Where things live
 
