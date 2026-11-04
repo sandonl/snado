@@ -18,8 +18,7 @@ function HomePage() {
         </div>
         <p className="text-sm">Hi,</p>
         <p className="text-sm">
-          I&apos;m a software engineer living in Melbourne, Australia and
-          currently work at{" "}
+          I&apos;m an AI / Software Engineer living in Melbourne, Australia and currently work at{" "}
           <a
             href="https://tilt.legal"
             className="text-zinc-400 hover:text-zinc-500"
