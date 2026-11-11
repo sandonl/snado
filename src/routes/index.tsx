@@ -1,8 +1,14 @@
+import { pageHead, site } from '@/lib/seo'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import LetterSwapPingPong from '@/components/letter-swap-ping-pong'
 import ShaderHero from '@/components/shader-hero'
 
 export const Route = createFileRoute('/')({
+  head: () => pageHead({
+    title: 'Sandon Lai | AI & Software Engineer',
+    description: site.description,
+    path: '/',
+  }),
   component: HomePage
 })
 

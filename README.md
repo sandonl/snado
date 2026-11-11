@@ -52,3 +52,21 @@ Write the post here.
 ```
 
 The post appears at `/posts/my-new-post`. Use a unique slug; the posts page lists entries newest first.
+
+## Search and AI discovery
+
+The public site redirects to `https://www.sandonl.dev`. Its canonical origin and shared description live in `src/lib/seo.ts`.
+
+- Each page defines its own title, description, canonical URL and social sharing metadata.
+- JSON-LD describes Sandon, the website and individual blog posts using their existing metadata.
+- `/robots.txt` allows all crawlers and points to `/sitemap.xml`. This includes AI crawlers; it does not distinguish search from model training.
+- `/sitemap.xml` lists the home page, projects, posts index and every published post.
+- `/llms.txt` provides a short site overview and links to the pages and posts for AI readers.
+
+The sitemap and llms.txt are server routes generated from Content Collections, so new posts are included automatically on the next build. They are not manually maintained files in `public/`. Update the llms.txt page descriptions if the project list changes.
+
+The site already serves article text in its HTML, so crawlers can read it without running JavaScript. Keep post summaries accurate and headings descriptive. Structured data should describe the visible content.
+
+`llms.txt` is a [proposed format](https://llmstxt.org/), not a promise of indexing or AI citations. [Google's guidance](https://developers.google.com/search/docs/appearance/ai-features) recommends the same sound SEO foundations for its AI search features.
+
+After deployment, submit `https://www.sandonl.dev/sitemap.xml` in Google Search Console and Bing Webmaster Tools. Account verification and sitemap submission are separate from these code changes.
