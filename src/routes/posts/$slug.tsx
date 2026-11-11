@@ -1,3 +1,4 @@
+import { pageHead, siteUrl, structuredData } from '@/lib/seo'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { allPosts } from 'content-collections'
 import { MDXContent } from '@content-collections/mdx/react'
@@ -15,6 +16,37 @@ export const Route = createFileRoute('/posts/$slug')({
       throw notFound()
     }
     return { post }
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData) {
+      return { meta: [{ title: 'Post not found | Sandon Lai' }, { name: 'robots', content: 'noindex' }] }
+    }
+    const { post } = loaderData
+    const head = pageHead({
+      title: `${post.title} | Sandon Lai`,
+      description: post.summary,
+      path: `/posts/${post.slug}`,
+      type: 'article',
+    })
+    return {
+      ...head,
+      meta: [
+        ...head.meta,
+        { property: 'article:published_time', content: post.createdAt },
+        { name: 'author', content: post.author },
+      ],
+      scripts: [structuredData({
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.summary,
+        datePublished: post.createdAt,
+        author: { '@type': 'Person', '@id': siteUrl('/#person'), name: post.author, url: siteUrl('/') },
+        mainEntityOfPage: siteUrl(`/posts/${post.slug}`),
+        keywords: post.tags,
+        inLanguage: 'en',
+      })],
+    }
   },
   component: PostPage,
   notFoundComponent: () => (

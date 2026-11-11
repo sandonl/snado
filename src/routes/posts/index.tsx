@@ -1,8 +1,14 @@
+import { pageHead } from '@/lib/seo'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { allPosts } from 'content-collections'
 import LetterSwapPingPong from '@/components/letter-swap-ping-pong'
 
 export const Route = createFileRoute('/posts/')({
+  head: () => pageHead({
+    title: 'Posts | Sandon Lai',
+    description: 'Writing by Sandon Lai on software engineering, AI, legal technology and language learning.',
+    path: '/posts',
+  }),
   component: PostsPage
 })
 
