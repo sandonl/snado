@@ -10,7 +10,7 @@ export const Route = createFileRoute('/sitemap.xml')({
   server: {
     handlers: {
       GET: () => {
-        const paths = ['/', '/projects', '/posts', ...allPosts.map((post) => `/posts/${post.slug}`)]
+        const paths = ['/', '/posts', ...allPosts.map((post) => `/posts/${post.slug}`)]
         // Omit lastmod until we track real content updates, rather than build times.
         const urls = paths.map((path) => `<url><loc>${escapeXml(siteUrl(path))}</loc></url>`)
         return new Response(

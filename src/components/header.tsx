@@ -13,12 +13,6 @@ const Header = () => {
               Home
             </Link>
             <Link
-              to="/projects"
-              className="text-primary hover:text-primary/80 py-2 rounded-md text-sm font-medium"
-            >
-              Projects
-            </Link>
-            <Link
               to="/posts"
               className="text-primary hover:text-primary/80 py-2 rounded-md text-sm font-medium"
             >

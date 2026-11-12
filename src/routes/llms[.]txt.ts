@@ -17,7 +17,6 @@ export const Route = createFileRoute('/llms.txt')({
           '## Pages',
           '',
           `- [About Sandon](${siteUrl('/')}): Background, current work and interests.`,
-          `- [Projects](${siteUrl('/projects')}): Eve Korean Tutor, Quarry and ROVE.`,
           `- [Posts](${siteUrl('/posts')}): All published writing.`,
           '',
           '## Posts',

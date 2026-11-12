@@ -1,6 +1,6 @@
 # Snado
 
-Sandon’s personal website: a little about me, the projects I’m building, and posts on software, AI and language learning.
+Sandon’s personal website: a little about me and posts on software, AI and language learning.
 
 Built with React, TypeScript, TanStack Start and Vite. Styling uses Tailwind CSS, and posts are written in MDX and compiled with Content Collections.
 
@@ -27,7 +27,7 @@ Commit `bun.lock` when dependencies change. For a reproducible install, use `bun
 
 ## Where things live
 
-- `src/routes/` — home, projects and post pages.
+- `src/routes/` — home, post pages and crawler discovery routes.
 - `src/posts/` — MDX posts.
 - `src/components/` — shared UI and visual effects.
 - `src/app/globals.css` — global styles.
@@ -60,10 +60,10 @@ The public site redirects to `https://www.sandonl.dev`. Its canonical origin and
 - Each page defines its own title, description, canonical URL and social sharing metadata.
 - JSON-LD describes Sandon, the website and individual blog posts using their existing metadata.
 - `/robots.txt` allows all crawlers and points to `/sitemap.xml`. This includes AI crawlers; it does not distinguish search from model training.
-- `/sitemap.xml` lists the home page, projects, posts index and every published post.
+- `/sitemap.xml` lists the home page, posts index and every published post.
 - `/llms.txt` provides a short site overview and links to the pages and posts for AI readers.
 
-The sitemap and llms.txt are server routes generated from Content Collections, so new posts are included automatically on the next build. They are not manually maintained files in `public/`. Update the llms.txt page descriptions if the project list changes.
+The sitemap and llms.txt are server routes generated from Content Collections, so new posts are included automatically on the next build. They are not manually maintained files in `public/`. Update the llms.txt page descriptions if the site structure changes.
 
 The site already serves article text in its HTML, so crawlers can read it without running JavaScript. Keep post summaries accurate and headings descriptive. Structured data should describe the visible content.
 
