@@ -71,20 +71,9 @@ interior_footprints.append((-3.88,.68,16.12,17.19))
 rod('Interior counter brass foot rail',(-3.5,15.99,.28),(.25,15.99,.28),.017,bar_edge,9)
 for x in [-3.4,-1.6,.15]:rod('Interior foot rail bracket',(x,16.2,.17),(x,15.99,.28),.013,steel_dark,8)
 
-# Coffee-making equipment, glassware, bottles and cups give the counter a job.
-box('Interior espresso machine body',(-2.82,16.7,1.3),(.76,.43,.43),steel_silver,.008)
-box('Interior espresso black control panel',(-2.82,16.465,1.37),(.66,.016,.11),ink,.001)
-box('Interior espresso drip tray',(-2.82,16.38,1.102),(.68,.19,.028),steel_silver,.002)
-for x in [-3.0,-2.65]:
-    cylinder('Interior espresso round control',(x,16.446,1.38),.026,.018,ivory,12).rotation_euler.x=math.pi/2
-    rod('Interior espresso group head',(x,16.46,1.27),(x,16.35,1.25),.026,steel_silver,9)
-    rod('Interior espresso portafilter',(x,16.35,1.25),(x+.13,16.27,1.25),.013,ink,8)
-    cup('Interior espresso ready cup',x,16.35,1.12,.47)
-for x in [-3.48,-2.15]:
-    box('Interior grinder motor',(x,16.7,1.24),(.18,.21,.31),ink,.003)
-    cylinder('Interior grinder hopper',(x,16.7,1.52),.115,.25,glassware,12,top_radius=.08)
-    cylinder('Interior grinder lid',(x,16.7,1.66),.12,.025,ink,12)
-    rod('Interior grinder spout',(x,16.6,1.27),(x,16.48,1.22),.025,steel_silver,8)
+# Equipment controls and dispensing hardware face the staff aisle (+Y).
+exec(compile((OUTPUT/'coffee_equipment.py').read_text(),str(OUTPUT/'coffee_equipment.py'),'exec'),globals())
+build_coffee_equipment(scene,seoul,rig)
 
 def tumbler(name,x,y,z,r=.045,h=.105):
     vertices=[]

@@ -220,7 +220,10 @@ scene.render.engine='CYCLES';scene.cycles.samples=28;scene.cycles.use_denoising=
 scene.render.resolution_x=1500;scene.render.resolution_y=1050;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format='PNG';scene.view_settings.view_transform='Standard';scene.view_settings.look='None'
 # New back-side materials get the same illustration treatment as the existing fronts.
-exec(style_code[style_code.index('def illustrated_materials():'):style_code.index('# Freestyle is the Blender')],globals())
+# Equipment has its own softer metal shading and transparent hoppers.
+illustration_code=style_code[style_code.index('def illustrated_materials():'):style_code.index('# Freestyle is the Blender')]
+illustration_code=illustration_code.replace('    for mat in used:\n','    for mat in used:\n        if mat.name.startswith("Equipment · "):continue\n',1)
+exec(illustration_code,globals())
 # Unlike the old opaque façade studies, these panes can be seen through from
 # both inside and outside. The solid mullions and wall shell remain separate.
 for mat in bpy.data.materials:

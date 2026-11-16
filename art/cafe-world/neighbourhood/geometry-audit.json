@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "probeCount": 33,
+  "probeCount": 37,
   "probes": [
     {
       "name": "Lane opens into the shared courtyard",
@@ -166,7 +166,31 @@
       "name": "Quiet seating partition exists",
       "passed": true,
       "hit": "Interior low seating partition"
+    },
+    {
+      "name": "Espresso controls face the barista aisle",
+      "passed": true,
+      "hit": "Coffee equipment \u00b7 espresso operator brew switch surround",
+      "normalY": 1.0
+    },
+    {
+      "name": "Espresso finished rear faces customers",
+      "passed": true,
+      "hit": "Coffee equipment \u00b7 espresso customer rear panel",
+      "normalY": -1.0
+    },
+    {
+      "name": "Grinder controls face the barista aisle",
+      "passed": true,
+      "hit": "Coffee equipment \u00b7 grinder operator display",
+      "normalY": 1.0
+    },
+    {
+      "name": "Grinder controls face the barista aisle",
+      "passed": true,
+      "hit": "Coffee equipment \u00b7 grinder operator display.001",
+      "normalY": 1.0
     }
   ],
-  "scope": "Actual saved Blender geometry: connector and caf\u00e9 entrance clear; sampled side/rear surfaces, eave closures and roofs present. This does not claim furnished interiors behind closed doors."
+  "scope": "Actual saved Blender geometry: connector and caf\u00e9 entrance clear; sampled side/rear surfaces, eave closures and roofs present; coffee equipment operating faces checked from the staff aisle. This does not claim furnished interiors behind closed doors."
 }

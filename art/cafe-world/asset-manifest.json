@@ -31,14 +31,17 @@
         "neighbourhood/quiet-seating.png",
         "neighbourhood/rear-buildings.png",
         "neighbourhood/scenery.png",
-        "neighbourhood/overview.png"
+        "neighbourhood/overview.png",
+        "neighbourhood/coffee-customer.png",
+        "neighbourhood/coffee-operator.png"
       ],
       "status": "Canonical assembled world for the playable prototype",
       "units": "metres",
       "upAxis": "Z",
       "runtime": "../../public/models/neighbourhood.glb",
       "layout": "../../src/world/layout.json",
-      "scope": "One continuous lane, workshop courtyard, enterable café bar and tiled seating, complete exterior shells, perimeter streets and distant scenery."
+      "scope": "One continuous lane, workshop courtyard, enterable café bar and tiled seating, complete exterior shells, perimeter streets and distant scenery.",
+      "equipment": "Two-group espresso machine and two burr grinders; controls and dispensing hardware face the staff aisle (+Y), finished rear panels face customers (-Y). Rebuild with neighbourhood/update_coffee_equipment.py."
     }
   ],
   "authoring": "neighbourhood/build_neighbourhood.py assembles the approved Mullae façade and lower Melbourne lane, adds the interior and scenery, and writes one canonical editable neighbourhood.blend plus the matching browser collision layout. The individual studies remain editable sources.",
