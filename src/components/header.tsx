@@ -18,6 +18,12 @@ const Header = () => {
             >
               Posts
             </Link>
+            <Link
+              to="/world"
+              className="text-primary hover:text-primary/80 py-2 rounded-md text-sm font-medium"
+            >
+              Explore
+            </Link>
           </nav>
         </div>
       </div>

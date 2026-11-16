@@ -1,0 +1,42 @@
+.portfolio-world{position:fixed;inset:0;z-index:50;background:#d7e0df;color:#34413f;font-family:'Geist Sans',sans-serif}
+.world-canvas{display:block;width:100%;height:100%;touch-action:none;outline-offset:-4px}
+.world-header{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:28px 34px;pointer-events:none;gap:24px}
+.world-header a,.world-header button{pointer-events:auto}
+.world-identity{display:flex;flex-direction:column;gap:5px;text-shadow:0 1px 8px #e7e8dc}
+.world-identity h1{font-size:20px;font-weight:600;letter-spacing:-.7px;margin:0}.world-identity a{text-decoration:none;color:inherit}
+.world-identity>span{font-size:11px;letter-spacing:1.4px;text-transform:uppercase}
+.world-header nav{display:flex;align-items:center;gap:8px}
+.world-header nav>a,.world-header nav>button{border:1px solid #66736a40;background:#f4f0e4e8;padding:10px 15px;font-size:12px;text-decoration:none;color:inherit;border-radius:3px;cursor:pointer}
+.world-header a:hover,.world-header button:hover{background:#fffaf0}
+.world-header button:disabled{opacity:.45;cursor:wait}
+.world-places{position:absolute;right:34px;top:83px;width:280px;background:#f7f3e8f5;border:1px solid #66736a40;padding:22px;box-shadow:0 10px 32px #3e4b4620;border-radius:3px}
+.world-eyebrow{text-transform:uppercase;font-size:10px;letter-spacing:1.7px;margin:0 0 16px;color:#6a756e}
+.world-route-note{font-size:12px;line-height:1.8;margin:0 0 22px;color:#65726a}
+.world-place-link{display:flex;width:100%;justify-content:space-between;border:0;border-bottom:1px solid #66736a25;background:none;padding:12px 0;color:inherit;font-size:13px;cursor:pointer;text-align:left}
+.world-status{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#f6f1e6ed;padding:36px 42px;border:1px solid #66736a30;width:min(420px,calc(100vw - 40px));text-align:center}
+.world-status h2{font-size:20px;font-weight:500;margin:14px 0 12px;letter-spacing:-.5px}
+.world-status p{font-size:13px;line-height:1.7;color:#6d7870;margin:0 0 16px}
+.world-status a{font-size:13px;color:inherit;text-underline-offset:5px}
+.world-status details{font-size:11px;margin-top:24px;text-align:left}
+.world-loading-mark{display:block;border:1px solid #87958b;width:25px;height:25px;margin:auto;transform:rotate(45deg);animation:world-breathe 2s ease-in-out infinite}
+.world-caption{position:absolute;left:34px;bottom:76px;pointer-events:none;text-shadow:0 1px 10px #eff0e6}
+.world-caption>span{font-size:10px;text-transform:uppercase;letter-spacing:2px}
+.world-caption>p{font-size:13px;max-width:260px;margin:8px 0 0}
+.world-help{position:absolute;bottom:28px;left:34px;display:flex;gap:20px;align-items:center;font-size:11px;color:#47584f;background:#f6f1e6d9;padding:9px 13px;border:1px solid #66736a30;border-radius:3px}
+.world-help>span{display:flex;align-items:center;gap:4px;white-space:nowrap}
+.portfolio-world kbd{font:10px 'Geist Mono',monospace;border:1px solid #74817750;border-radius:2px;padding:3px 5px;line-height:1;background:#fff9}
+.world-discover{position:absolute;bottom:102px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:13px;border:1px solid #62756b70;background:#f7f2e7f5;border-radius:3px;padding:13px 18px;cursor:pointer;color:inherit;font-size:14px;box-shadow:0 6px 20px #34413f18;white-space:nowrap}
+.world-discover:hover{background:#fffaf0}
+.world-touch-controls{display:none;position:absolute;right:24px;bottom:25px;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(2,46px);gap:5px}
+.world-touch-controls button{border:1px solid #66736a40;background:#f6f1e6df;font-size:20px;color:inherit;touch-action:none;border-radius:3px;user-select:none}
+.world-move-forward{grid-column:2}.world-move-left{grid-column:1;grid-row:2}.world-move-backward{grid-column:2;grid-row:2}.world-move-right{grid-column:3;grid-row:2}
+.world-dialog{border:1px solid #66736a55;border-radius:3px;background:#f7f3e9;color:#34413f;width:min(460px,calc(100vw - 32px));padding:38px;box-shadow:0 24px 90px #263b3d30}
+.world-dialog::backdrop{background:#384b4b55;backdrop-filter:blur(3px)}
+.world-dialog h2{font-size:28px;letter-spacing:-1px;font-weight:500;margin:0 0 20px}
+.world-dialog>p:not(.world-eyebrow){font-size:14px;line-height:1.85;margin:0 0 25px}
+.world-dialog-close{position:absolute;right:12px;top:9px;border:0;background:none;font-size:26px;color:inherit;cursor:pointer;width:35px;height:35px}
+.world-story-link{display:flex;align-items:center;justify-content:space-between;text-decoration:none;border-bottom:1px solid #66736a60;padding-bottom:12px;font-size:13px;color:inherit}
+.world-keep-walking{margin-top:25px;padding:0;border:0;background:none;color:#758174;font-size:12px;cursor:pointer}
+@keyframes world-breathe{50%{opacity:.35;transform:rotate(45deg) scale(.85)}}
+@media(max-width:650px){.world-header{padding:19px 18px;gap:12px}.world-header nav>a,.world-header nav>button{padding:9px 11px;font-size:11px}.world-identity h1{font-size:18px}.world-identity>span{font-size:9px;letter-spacing:1px}.world-places{right:18px;top:74px}.world-caption{left:18px;bottom:143px}.world-caption>p{max-width:185px;font-size:11px}.world-help{left:18px;bottom:22px;gap:0;padding:9px}.world-help>span:first-child,.world-help>span:last-child{display:none}.world-touch-controls{display:grid;right:18px;bottom:20px}.world-discover{bottom:190px}.world-dialog{padding:32px 26px}}
+@media(prefers-reduced-motion:reduce){.world-loading-mark{animation:none}}

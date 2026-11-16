@@ -1,4 +1,4 @@
-import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
+import { Outlet, createRootRoute, HeadContent, Scripts, useRouterState } from '@tanstack/react-router'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Analytics } from '@vercel/analytics/react'
@@ -67,15 +67,16 @@ function RootLayout() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const isWorld = useRouterState({ select: state => state.location.pathname === '/world' })
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body className="font-sans antialiased bg-[#1b1b1b] max-w-2xl mx-auto overflow-x-hidden px-4 selection:bg-sky-300 selection:text-sky-900">
-        <Header />
+        {!isWorld && <Header />}
         {children}
-        <Footer />
+        {!isWorld && <Footer />}
         <Analytics />
         <Scripts />
       </body>
