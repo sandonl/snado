@@ -1,0 +1,27 @@
+{
+  "name": "Melbourne–Seoul portfolio world",
+  "status": "Approved Mullae-dong style target; Melbourne and playable scene in development",
+  "artDirection": "Illustrated 3D: believable street proportions, thin ink lines, muted flat colour, industrial buildings reused as cafés",
+  "assets": [
+    {
+      "id": "mullae",
+      "source": "mullae-lettering-v05/mullae-lettering-v05.blend",
+      "preview": "mullae-lettering-v05/mullae-lettering-v05.png",
+      "status": "Approved visual target",
+      "units": "metres",
+      "upAxis": "Z",
+      "frontDirection": "-Y",
+      "workingName": "틈새"
+    }
+  ],
+  "authoring": "The approved blend is the canonical editable source. Earlier Python studies document the modelling process; superseded binary studies are kept locally.",
+  "runtime": "Blender Freestyle and illustration shaders need a corresponding browser rendering pass; gameplay geometry will be exported separately.",
+  "fonts": {
+    "directory": "fonts",
+    "licences": [
+      "fonts/NanumBrushScript-OFL.txt",
+      "fonts/NanumMyeongjo-OFL.txt"
+    ]
+  },
+  "validation": "mullae-lettering-v05/lettering-audit.json checks the visible lettering against surrounding geometry."
+}

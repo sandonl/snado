@@ -43,3 +43,20 @@ next-env.d.ts
 # content-collections
 .content-collections
 dist/
+
+# Local build output and Blender study caches
+.output/
+**/__pycache__/
+*.blend1
+
+# Keep superseded study outputs locally; version the approved art target.
+/assets/cafe-world/**/*.blend
+/assets/cafe-world/**/*.png
+/assets/cafe-world/**/*.glb
+/assets/cafe-world/**/asset-report.json
+/assets/cafe-world/**/asset-validation.json
+/assets/cafe-world/**/lettering-audit-before.json
+/assets/cafe-world/mullae-signage-v04/*-manifest.json
+/assets/cafe-world/mullae-signage-v04/lettering-audit.json
+!/assets/cafe-world/mullae-lettering-v05/mullae-lettering-v05.blend
+!/assets/cafe-world/mullae-lettering-v05/mullae-lettering-v05.png

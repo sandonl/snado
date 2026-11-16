@@ -1,0 +1,85 @@
+{
+  "workingName": "틈새",
+  "removedFromView": [
+    "Teumsae handwritten signature",
+    "Teumsae loose painted underline",
+    "Window slow coffee note",
+    "Window small lower inscription",
+    "Teumsae English wordmark"
+  ],
+  "copy": [
+    {
+      "name": "Rear building old Hangul",
+      "text": "대\n성\n정\n밀"
+    },
+    {
+      "name": "Retained factory sign",
+      "text": "형제 철공소"
+    },
+    {
+      "name": "Small old sign subline",
+      "text": "작은 수리도 합니다"
+    },
+    {
+      "name": "Old side-lane shop Hangul",
+      "text": "홍상회"
+    },
+    {
+      "name": "Weathered long warehouse fascia retained workshop lettering",
+      "text": "틈새"
+    },
+    {
+      "name": "Small coffee lettering",
+      "text": "한 잔, 천천히"
+    },
+    {
+      "name": "Coffee corner lightbox",
+      "text": "틈\n새"
+    },
+    {
+      "name": "Rest stamp character",
+      "text": "쉼"
+    },
+    {
+      "name": "Ghost of original workshop name",
+      "text": "대성정밀"
+    },
+    {
+      "name": "Ghost of original workshop trade",
+      "text": "절삭 · 용접"
+    },
+    {
+      "name": "Window handwritten welcome",
+      "text": "쉬어\n가요"
+    },
+    {
+      "name": "Door handwritten invitation",
+      "text": "오늘은\n천천히."
+    },
+    {
+      "name": "Mullae corner plaque title",
+      "text": "문래동"
+    },
+    {
+      "name": "Mullae corner plaque English",
+      "text": "MULLAE-DONG"
+    },
+    {
+      "name": "Small hand-painted alley note",
+      "text": "골목 안쪽"
+    },
+    {
+      "name": "Small café board coffee",
+      "text": "오늘의\n커피"
+    },
+    {
+      "name": "Small café board hours",
+      "text": "한 잔 더?"
+    },
+    {
+      "name": "Small café board menu",
+      "text": "FILTER · LATTE"
+    }
+  ],
+  "validation": "lettering-audit.json"
+}
