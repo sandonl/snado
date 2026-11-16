@@ -1,0 +1,70 @@
+{
+  "name": "Melbourne–Seoul portfolio world",
+  "status": "Approved Mullae façade retained; continuous playable neighbourhood, interior and scenery are an art-direction prototype.",
+  "artDirection": "Architectural 3D with believable proportions, fine pencil contours, quiet watercolour washes, low café buildings and reused industrial spaces.",
+  "assets": [
+    {
+      "id": "mullae",
+      "source": "mullae-lettering-v05/mullae-lettering-v05.blend",
+      "preview": "mullae-lettering-v05/mullae-lettering-v05.png",
+      "status": "Approved visual target",
+      "units": "metres",
+      "upAxis": "Z",
+      "frontDirection": "-Y",
+      "workingName": "틈새"
+    },
+    {
+      "id": "melbourne-lane",
+      "source": "melbourne-lane/melbourne-lane.blend",
+      "preview": "melbourne-lane/melbourne-lane.png",
+      "status": "First art pass: varied one- and two-storey café lane",
+      "units": "metres",
+      "upAxis": "Z",
+      "frontDirection": "-Y"
+    },
+    {
+      "id": "neighbourhood",
+      "source": "neighbourhood/neighbourhood.blend",
+      "previews": [
+        "neighbourhood/lane-courtyard.png",
+        "neighbourhood/cafe-interior.png",
+        "neighbourhood/quiet-seating.png",
+        "neighbourhood/rear-buildings.png",
+        "neighbourhood/scenery.png",
+        "neighbourhood/overview.png"
+      ],
+      "status": "Canonical assembled world for the playable prototype",
+      "units": "metres",
+      "upAxis": "Z",
+      "runtime": "../../public/models/neighbourhood.glb",
+      "layout": "../../src/world/layout.json",
+      "scope": "One continuous lane, workshop courtyard, enterable café bar and tiled seating, complete exterior shells, perimeter streets and distant scenery."
+    }
+  ],
+  "authoring": "neighbourhood/build_neighbourhood.py assembles the approved Mullae façade and lower Melbourne lane, adds the interior and scenery, and writes one canonical editable neighbourhood.blend plus the matching browser collision layout. The individual studies remain editable sources.",
+  "runtime": "export_runtime.py exports one Draco GLB. The Three.js watercolour and pencil pass is an approximation of the reference direction; Blender Freestyle is used for native art previews.",
+  "fonts": {
+    "directory": "fonts",
+    "licences": [
+      "fonts/NanumBrushScript-OFL.txt",
+      "fonts/NanumMyeongjo-OFL.txt"
+    ]
+  },
+  "validation": {
+    "lettering": "mullae-lettering-v05/lettering-audit.json",
+    "geometry": "neighbourhood/geometry-audit.json",
+    "movement": "../../src/world/movement.test.ts"
+  },
+  "references": {
+    "exterior": "User-supplied Melbourne café lane and Mullae industrial street photographs. Original composite architecture; fictional café names.",
+    "interior": "User-supplied three café interiors: exposed timber/steel roof, patched plaster, timber bar, coffee equipment, bamboo, warm suspended light; quiet terracotta dining and low partitions.",
+    "shader": "https://x.com/TsukasaFujiwar2/status/2121969526107779526"
+  },
+  "buildOrder": [
+    "blender --background --factory-startup --python-exit-code 1 --python art/cafe-world/melbourne-lane/build_lane.py",
+    "blender --background art/cafe-world/melbourne-lane/melbourne-lane.blend --python-exit-code 1 --python art/cafe-world/melbourne-lane/render_lane.py",
+    "blender --background --factory-startup --python-exit-code 1 --python art/cafe-world/neighbourhood/build_neighbourhood.py",
+    "blender --background art/cafe-world/neighbourhood/neighbourhood.blend --python-exit-code 1 --python art/cafe-world/export_runtime.py -- neighbourhood",
+    "blender --background art/cafe-world/neighbourhood/neighbourhood.blend --python-exit-code 1 --python art/cafe-world/neighbourhood/render_neighbourhood.py"
+  ]
+}

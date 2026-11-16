@@ -50,13 +50,25 @@ dist/
 *.blend1
 
 # Keep superseded study outputs locally; version the approved art target.
-/assets/cafe-world/**/*.blend
-/assets/cafe-world/**/*.png
-/assets/cafe-world/**/*.glb
-/assets/cafe-world/**/asset-report.json
-/assets/cafe-world/**/asset-validation.json
-/assets/cafe-world/**/lettering-audit-before.json
-/assets/cafe-world/mullae-signage-v04/*-manifest.json
-/assets/cafe-world/mullae-signage-v04/lettering-audit.json
-!/assets/cafe-world/mullae-lettering-v05/mullae-lettering-v05.blend
-!/assets/cafe-world/mullae-lettering-v05/mullae-lettering-v05.png
+/art/cafe-world/**/*.blend
+/art/cafe-world/**/*.png
+/art/cafe-world/**/*.glb
+/art/cafe-world/**/asset-report.json
+/art/cafe-world/**/asset-validation.json
+/art/cafe-world/**/lettering-audit-before.json
+/art/cafe-world/mullae-signage-v04/*-manifest.json
+/art/cafe-world/mullae-signage-v04/lettering-audit.json
+!/art/cafe-world/mullae-lettering-v05/mullae-lettering-v05.blend
+!/art/cafe-world/mullae-lettering-v05/mullae-lettering-v05.png
+!/art/cafe-world/melbourne-lane/melbourne-lane.blend
+!/art/cafe-world/melbourne-lane/melbourne-lane.png
+!/art/cafe-world/neighbourhood/neighbourhood.blend
+!/art/cafe-world/neighbourhood/lane-courtyard.png
+!/art/cafe-world/neighbourhood/rear-buildings.png
+!/art/cafe-world/neighbourhood/overview.png
+
+/.review/
+
+!/art/cafe-world/neighbourhood/cafe-interior.png
+!/art/cafe-world/neighbourhood/quiet-seating.png
+!/art/cafe-world/neighbourhood/scenery.png

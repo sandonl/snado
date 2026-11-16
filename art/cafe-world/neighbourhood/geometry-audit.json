@@ -1,0 +1,172 @@
+{
+  "passed": true,
+  "probeCount": 33,
+  "probes": [
+    {
+      "name": "Lane opens into the shared courtyard",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Caf\u00e9 bay remains open",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Caf\u00e9 rear eave is enclosed",
+      "passed": true,
+      "hit": "Caf\u00e9 rear roof closure"
+    },
+    {
+      "name": "Caf\u00e9 east window header is enclosed",
+      "passed": true,
+      "hit": "Caf\u00e9 east full window header"
+    },
+    {
+      "name": "Caf\u00e9 west eave is enclosed",
+      "passed": true,
+      "hit": "Caf\u00e9 west roof closure"
+    },
+    {
+      "name": "Workshop rear eave is enclosed",
+      "passed": true,
+      "hit": "Workshop rear roof closure"
+    },
+    {
+      "name": "Caf\u00e9 roof is closed",
+      "passed": true,
+      "hit": "Workshop \u00b7 Old low workshop roof sheet"
+    },
+    {
+      "name": "Lane building 0 rear surface",
+      "passed": true,
+      "hit": "Lane rear service door 0 painted panel"
+    },
+    {
+      "name": "Lane building 0 roof",
+      "passed": true,
+      "hit": "Lane \u00b7 Morrow upper cornice"
+    },
+    {
+      "name": "Lane building 1 rear surface",
+      "passed": true,
+      "hit": "Lane rear service door 1 painted panel"
+    },
+    {
+      "name": "Lane building 1 roof",
+      "passed": true,
+      "hit": "Lane \u00b7 Editions upper cornice"
+    },
+    {
+      "name": "Lane building 2 rear surface",
+      "passed": true,
+      "hit": "Lane rear service door 2 painted panel"
+    },
+    {
+      "name": "Lane building 2 roof",
+      "passed": true,
+      "hit": "Lane \u00b7 North upper cornice"
+    },
+    {
+      "name": "Lane building 3 rear surface",
+      "passed": true,
+      "hit": "Lane rear service door 3 painted panel"
+    },
+    {
+      "name": "Lane building 3 roof",
+      "passed": true,
+      "hit": "Lane \u00b7 Coda upper cornice"
+    },
+    {
+      "name": "Lane building 4 rear surface",
+      "passed": true,
+      "hit": "Lane rear service door 4 painted panel"
+    },
+    {
+      "name": "Lane building 4 roof",
+      "passed": true,
+      "hit": "Lane \u00b7 Market upper cornice"
+    },
+    {
+      "name": "Lane building 5 rear surface",
+      "passed": true,
+      "hit": "Lane rear service door 5 painted panel"
+    },
+    {
+      "name": "Lane building 5 roof",
+      "passed": true,
+      "hit": "Lane \u00b7 Studio upper cornice"
+    },
+    {
+      "name": "Entry end has actual window geometry",
+      "passed": true,
+      "hit": "Lane exposed end sash centre mullion"
+    },
+    {
+      "name": "Outer rear has actual window geometry",
+      "passed": true,
+      "hit": "Lane rear sash 0 centre mullion"
+    },
+    {
+      "name": "Entry end has actual window geometry",
+      "passed": true,
+      "hit": "Lane exposed end sash centre mullion.006"
+    },
+    {
+      "name": "Outer rear has actual window geometry",
+      "passed": true,
+      "hit": "Lane rear sash 3 centre mullion"
+    },
+    {
+      "name": "Rear brick block rear",
+      "passed": true,
+      "hit": "Workshop \u00b7 Older rear red brick building"
+    },
+    {
+      "name": "Rear brick block west",
+      "passed": true,
+      "hit": "Workshop \u00b7 Older rear red brick building"
+    },
+    {
+      "name": "Rear brick block east",
+      "passed": true,
+      "hit": "Workshop \u00b7 Older rear red brick building"
+    },
+    {
+      "name": "Side-lane block rear",
+      "passed": true,
+      "hit": "Workshop \u00b7 Old two-storey side-lane plaster block"
+    },
+    {
+      "name": "Side-lane block outer side",
+      "passed": true,
+      "hit": "Side-lane building full side window centre mullion.013"
+    },
+    {
+      "name": "Side-lane block inner side",
+      "passed": true,
+      "hit": "Side-lane building full side window centre mullion.004"
+    },
+    {
+      "name": "Far workshop rear",
+      "passed": true,
+      "hit": "Workshop \u00b7 Distant side-lane shed"
+    },
+    {
+      "name": "Interior entry aisle stays clear",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Full timber bar exists",
+      "passed": true,
+      "hit": "Interior timber bar carcass"
+    },
+    {
+      "name": "Quiet seating partition exists",
+      "passed": true,
+      "hit": "Interior low seating partition"
+    }
+  ],
+  "scope": "Actual saved Blender geometry: connector and caf\u00e9 entrance clear; sampled side/rear surfaces, eave closures and roofs present. This does not claim furnished interiors behind closed doors."
+}

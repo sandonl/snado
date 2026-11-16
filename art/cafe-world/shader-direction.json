@@ -1,0 +1,15 @@
+{
+  "reference": "https://x.com/TsukasaFujiwar2/status/2121969526107779526",
+  "direction": [
+    "Fine pencil contours rather than thick cartoon outlines",
+    "Muted, uneven watercolour washes anchored to the world",
+    "Soft layered foliage and distant neighbourhood scenery",
+    "Warm local light within the workshop café",
+    "Legible actual lettering and believable architectural scale"
+  ],
+  "implementation": {
+    "browser": "src/world/watercolour.ts and scene.ts: stable procedural washes, paper grain, edge geometry, distance haze, warm room light",
+    "blender": "Illustrated materials and Freestyle for native geometry review; not the reference artist’s shader"
+  },
+  "stage": "First browser shading pass. Art direction remains open to iteration."
+}
