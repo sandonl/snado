@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "heightMetres": 1.611,
+  "soleHeightMetres": 0.05,
+  "meshCount": 41,
+  "rigParts": [
+    "leftArm",
+    "rightArm",
+    "leftLeg",
+    "rightLeg",
+    "leftShoe",
+    "rightShoe",
+    "leftEye",
+    "rightEye",
+    "upperBody",
+    "leftLowerLeg",
+    "rightLowerLeg",
+    "leftForeArm",
+    "rightForeArm",
+    "rightHand",
+    "heldCup"
+  ],
+  "frontDirection": "Blender -Y \u2192 glTF +Z",
+  "stage": "First playable character experiment from the user-supplied reference; original geometry and materials."
+}
