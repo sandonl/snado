@@ -1,7 +1,7 @@
 import { pageHead, site } from '@/lib/seo'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import LetterSwapPingPong from '@/components/letter-swap-ping-pong'
-import ShaderHero from '@/components/shader-hero'
+import PortfolioHero from '@/components/portfolio-hero'
 
 export const Route = createFileRoute('/')({
   head: () => pageHead({
@@ -15,9 +15,17 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   return (
     <div className="min-h-48 border-b pb-8">
-      <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen mb-12">
-        <ShaderHero />
-      </div>
+      <PortfolioHero />
+      <section id="portfolio" className="portfolio-projects" aria-labelledby="portfolio-title">
+        <div className="portfolio-projects-heading"><h2 id="portfolio-title">Portfolio</h2><span>01 / In progress</span></div>
+        <Link to="/world" className="portfolio-project">
+          <img src="/images/portfolio/cafe-world.jpg" width="1440" height="810" alt="A watercolour café laneway connecting Melbourne and Seoul" loading="lazy" />
+          <p className="portfolio-project-type">Three.js / Blender</p>
+          <h3>Café world</h3>
+          <p>A small, playable neighbourhood inspired by Melbourne laneways and Seoul’s workshop cafés.</p>
+          <span className="portfolio-project-open">Open app <span aria-hidden="true">↗</span></span>
+        </Link>
+      </section>
       <div className="flex flex-col gap-6">
         <div className="flex pb-3">
           <LetterSwapPingPong label="About" className="text-3xl font-bold" />

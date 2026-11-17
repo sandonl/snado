@@ -1,0 +1,54 @@
+.portfolio-home-header{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:36px 56px;color:#e3f5ec}
+.portfolio-home-header .portfolio-wordmark{font:italic 300 26px/32px 'Fraunces',serif;letter-spacing:-.02em}
+.portfolio-home-header nav{display:flex;gap:32px;font-size:15px;color:#9dbfaf}
+.portfolio-home-header::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(#0b1512c9,transparent);pointer-events:none}
+.portfolio-home-header nav a[aria-current=page],.portfolio-home-header a:hover{color:#e3f5ec}
+.portfolio-hero{position:relative;left:50%;margin-left:-50vw;width:100vw;height:min(900px,100svh);min-height:720px;overflow:hidden;background:#0b1512 url('/images/portfolio/horizon.jpg') center/cover;color:#e3f5ec;margin-bottom:72px}
+.portfolio-hero-field{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;pointer-events:none}
+.portfolio-hero-copy{position:absolute;top:clamp(140px,20vh,178px);left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;width:min(1000px,calc(100% - 48px))}
+.portfolio-hero-label{font:13px/16px 'Geist Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#7fe0b4}
+.portfolio-hero h1{font:italic 300 clamp(76px,7.3vw,104px)/.98 'Fraunces',serif;letter-spacing:-.035em;text-wrap:balance}
+.portfolio-hero-description{max-width:530px;font-size:19px;line-height:28px;color:#9dbfaf;text-wrap:pretty}
+.portfolio-hero-links{display:flex;align-items:center;gap:24px;font-size:15px}
+.portfolio-hero-links a{display:flex;gap:10px;align-items:center;text-decoration:none}
+.portfolio-hero-links a:not(.portfolio-hero-primary):hover{text-decoration:underline;text-underline-offset:5px}
+.portfolio-hero-primary{background:#f08a6e;color:#0b1512;border-radius:999px;padding:14px 24px}
+.portfolio-hero-primary:hover{background:#ffd7c4}
+.portfolio-hero a:focus-visible,.portfolio-hero button:focus-visible,.portfolio-home-header a:focus-visible{outline:2px solid #7fe0b4;outline-offset:6px}
+.portfolio-hero-footer{position:absolute;bottom:30px;left:56px;right:56px;display:flex;justify-content:space-between;align-items:center;gap:24px;font:11px/18px 'Geist Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#9dbfaf}
+.portfolio-field-picker{display:flex;gap:18px}
+.portfolio-field-picker button{padding:8px 0;border-bottom:1px solid transparent;cursor:pointer;text-transform:uppercase;color:inherit}
+.portfolio-field-picker button[aria-pressed=true]{color:#e3f5ec;border-bottom-color:#f08a6e}
+.portfolio-field-picker button span{opacity:.6}
+.portfolio-hero[data-field=rim] .portfolio-hero-copy{left:56px;top:28%;transform:none;align-items:flex-start;text-align:left;width:min(640px,calc(100% - 112px))}
+.portfolio-hero[data-field=rim] h1{font-size:clamp(62px,6vw,88px)}
+.portfolio-hero[data-field=rim] .portfolio-hero-description{max-width:470px}
+.portfolio-hero[data-field=ribbon] .portfolio-hero-copy{top:auto;bottom:135px;left:56px;transform:none;align-items:flex-start;text-align:left;width:calc(100% - 112px)}
+.portfolio-hero[data-field=ribbon] h1{font-size:clamp(100px,11.6vw,168px)}
+.portfolio-hero[data-field=ribbon]::after{content:'';position:absolute;inset:28% 0 0;background:linear-gradient(transparent,#0b1512 38%);pointer-events:none}
+.portfolio-hero-copy,.portfolio-hero-footer{z-index:1}
+.portfolio-projects{scroll-margin-top:32px;margin-bottom:64px;border-bottom:1px solid #3c403b;padding-bottom:40px}
+.portfolio-projects-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+.portfolio-projects-heading h2{font-size:26px;letter-spacing:-.03em}
+.portfolio-projects-heading span,.portfolio-project-type{font:11px/18px 'Geist Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#aaa9a1}
+.portfolio-project{display:block;color:#ecebe5}
+.portfolio-project>img{width:100%;height:auto;aspect-ratio:2.2;object-fit:cover;border-radius:6px;margin-bottom:24px}
+.portfolio-project-type{color:#91a99c}
+.portfolio-project h3{font-size:34px;line-height:42px;letter-spacing:-.04em;margin:10px 0}
+.portfolio-project p:not(.portfolio-project-type){font-size:15px;line-height:26px;color:#aaa9a1;max-width:520px}
+.portfolio-project-open{display:inline-block;font-size:14px;margin-top:20px;border-bottom:1px solid #69786d;padding-bottom:5px}
+.portfolio-project:hover .portfolio-project-open{border-color:#ecebe5}
+@media(max-width:700px){
+  .portfolio-home-header{padding:25px 24px}.portfolio-home-header .portfolio-wordmark{font-size:23px}.portfolio-home-header nav{gap:20px;font-size:13px}
+  .portfolio-hero{min-height:760px;height:100svh;margin-bottom:48px}
+  .portfolio-hero-copy{top:180px;gap:24px}.portfolio-hero-label{font-size:10px;letter-spacing:.12em}
+  .portfolio-hero h1{font-size:clamp(40px,10vw,70px);line-height:1.05;letter-spacing:-.04em}
+  .portfolio-hero-description{font-size:16px;line-height:25px;max-width:340px}
+  .portfolio-hero-links{gap:20px;font-size:13px}.portfolio-hero-primary{padding:13px 18px}
+  .portfolio-hero-footer{left:24px;right:24px;bottom:25px}.portfolio-hero-note{display:none}.portfolio-field-picker{gap:24px}
+  .portfolio-hero[data-field=rim] .portfolio-hero-copy{left:24px;top:27%;width:calc(100% - 48px)}
+  .portfolio-hero[data-field=rim] h1{font-size:clamp(40px,10vw,62px)}
+  .portfolio-hero[data-field=ribbon] .portfolio-hero-copy{left:24px;bottom:145px;width:calc(100% - 48px)}
+  .portfolio-hero[data-field=ribbon] h1{font-size:76px}
+  .portfolio-project>img{aspect-ratio:1.45}.portfolio-project h3{font-size:30px}
+}

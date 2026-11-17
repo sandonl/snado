@@ -1,6 +1,10 @@
 import { Link } from '@tanstack/react-router';
 
-const Header = () => {
+const Header = ({ isHome }: { isHome: boolean }) => {
+  if (isHome) return <header className="portfolio-home-header">
+    <Link to="/" className="portfolio-wordmark" aria-label="Sandon Lai, home">sandon lai</Link>
+    <nav aria-label="Main navigation"><Link to="/" activeProps={{ 'aria-current': 'page' }}>Home</Link><Link to="/posts">Posts</Link><Link to="/world">Explore</Link></nav>
+  </header>
   return (
     <header>
       <div>

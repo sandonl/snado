@@ -67,14 +67,15 @@ function RootLayout() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const isWorld = useRouterState({ select: state => state.location.pathname === '/world' })
+  const pathname = useRouterState({ select: state => state.location.pathname })
+  const isWorld = pathname === '/world'
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body className="font-sans antialiased bg-[#1b1b1b] max-w-2xl mx-auto overflow-x-hidden px-4 selection:bg-sky-300 selection:text-sky-900">
-        {!isWorld && <Header />}
+        {!isWorld && <Header isHome={pathname === '/'} />}
         {children}
         {!isWorld && <Footer />}
         <Analytics />
