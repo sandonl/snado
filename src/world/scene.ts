@@ -1,13 +1,19 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
-import { discoveries, moveThroughWorld, obstacles, spawn, cafeRoom, type DiscoveryId } from './world-data'
+import { discoveries, moveThroughWorld, obstacles, spawn, cafeRoom, seats, residents, type Seat, type SeatId, type DiscoveryId } from './world-data'
 import { watercolourMaterial } from './watercolour'
+import { loadWalker, characterPalettes, type Walker, type CharacterPaletteId } from './character'
+import { advanceJump, groundedJump, startJump, type JumpState } from './jump'
 
 export type MoveAction = 'forward' | 'backward' | 'left' | 'right'
+export type Activity = 'walking' | 'seated' | 'transitioning'
+type Posture = { kind: 'walking' } | { kind: 'sittingDown' | 'standingUp'; seat: Seat; elapsed: number; from: THREE.Vector3; fromYaw: number } | { kind: 'seated'; seat: Seat; elapsed: number }
 type Callbacks = {
   onNearby: (id: DiscoveryId | null) => void
   onDiscover: (id: DiscoveryId) => void
+  onNearbySeat: (id: SeatId | null) => void
+  onActivity: (activity: Activity) => void
 }
 export type WorldController = ReturnType<typeof createWorld>
 
@@ -27,6 +33,10 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   let paused = false
   let loaded = false
   let nearby: DiscoveryId | null = null
+  let nearbySeat: Seat | null = null
+  let posture: Posture = { kind: 'walking' }
+  let jumpState: JumpState = groundedJump
+  const people: { walker: Walker; offset: number }[] = []
   const keys = new Set<string>()
   const actions = new Set<MoveAction>()
   const modelMeshes: THREE.Mesh[] = []
@@ -50,21 +60,26 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   const avatar = new THREE.Group()
   scene.add(avatar)
   avatar.position.set(spawn.x, -.015, spawn.z)
-  mesh(new THREE.BoxGeometry(.43, .52, .25), '#556772', avatar, [0, 1, 0])
-  mesh(new THREE.IcosahedronGeometry(.17, 2), '#c5a18a', avatar, [0, 1.47, 0])
-  const hair = mesh(new THREE.IcosahedronGeometry(.172, 2), '#3b3b38', avatar, [0, 1.55, -.025])
-  hair.scale.set(1, .62, 1)
-  const limbs: THREE.Group[] = []
-  for (const side of [-1, 1]) {
-    const leg = new THREE.Group(); leg.position.set(side * .12, .73, 0); avatar.add(leg)
-    mesh(new THREE.BoxGeometry(.15, .6, .18), '#b7a07c', leg, [0, -.3, 0])
-    mesh(new THREE.BoxGeometry(.17, .1, .25), '#3d4a4b', leg, [0, -.63, .045])
-    limbs.push(leg)
-    const arm = new THREE.Group(); arm.position.set(side * .29, 1.2, 0); avatar.add(arm)
-    mesh(new THREE.BoxGeometry(.12, .43, .15), '#556772', arm, [0, -.19, 0])
-    mesh(new THREE.IcosahedronGeometry(.065, 1), '#c5a18a', arm, [0, -.43, 0])
-    limbs.push(arm)
-  }
+  let walker: Walker | null = null
+  const characterReady = loadWalker(loader).then(value => {
+    walker = value
+    avatar.add(value.root)
+    for (const resident of residents) {
+      const person = value.clone()
+      const palette = characterPalettes.find(value => value.id === resident.palette)
+      if (!palette) throw new Error(`Unknown resident palette: ${resident.palette}`)
+      person.setPalette(palette.id)
+      person.root.position.set(resident.x, resident.surfaceY - person.hipBottom, resident.z)
+      person.root.rotation.y = resident.yaw
+      scene.add(person.root)
+      people.push({ walker: person, offset: resident.offset })
+    }
+    if (disposed) releaseScene()
+  })
+  // Soft character lighting; the neighbourhood keeps its painted materials.
+  scene.add(new THREE.HemisphereLight('#fff3d7', '#71858b', 1.65))
+  const characterSun = new THREE.DirectionalLight('#fff1da', 2.1)
+  characterSun.position.set(-3, 6, 4); scene.add(characterSun)
   const shadow = new THREE.Mesh(new THREE.CircleGeometry(.32, 24), new THREE.MeshBasicMaterial({ color: '#485553', transparent: true, opacity: .12, depthWrite: false }))
   shadow.rotation.x = -Math.PI / 2; scene.add(shadow)
   for (const place of discoveries) {
@@ -119,7 +134,7 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
     scene.add(root)
     if (disposed) releaseScene()
   }
-  const ready = loadNeighbourhood().then(() => {
+  const ready = Promise.all([loadNeighbourhood(), characterReady]).then(() => {
     if (disposed) return
     loaded = true
     scene.updateMatrixWorld(true)
@@ -152,7 +167,14 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
     if (event.target instanceof HTMLElement && event.target !== canvas && event.target.closest('button,a,dialog,summary,select')) return
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)) event.preventDefault()
     keys.add(event.key.toLowerCase())
-    if (event.key.toLowerCase() === 'e' && nearby) callbacks.onDiscover(nearby)
+    if (event.repeat) return
+    if (event.code === 'Space') jump()
+    if (event.key.toLowerCase() === 'e') {
+      if (posture.kind === 'seated') stand()
+      else if (posture.kind === 'walking' && nearbySeat) sit()
+      else if (posture.kind === 'walking' && nearby) callbacks.onDiscover(nearby)
+    }
+    if (event.key === 'Escape' && posture.kind === 'seated') stand()
   }
   const keyUp = (event: KeyboardEvent) => { keys.delete(event.key.toLowerCase()) }
   const clearKeys = () => { keys.clear(); actions.clear(); dragging = false }
@@ -175,11 +197,29 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   canvas.addEventListener('pointerup', pointerUp)
   canvas.addEventListener('pointercancel', pointerUp)
 
+  function floorHeight(x: number, z: number) {
+    return x > cafeRoom.minX && x < cafeRoom.maxX && z > cafeRoom.minZ && z < cafeRoom.maxZ ? .065 : -.015
+  }
+  function jump() {
+    if (loaded && !paused && posture.kind === 'walking') jumpState = startJump(jumpState)
+  }
+  function sit() {
+    if (!loaded || paused || !walker || !nearbySeat || posture.kind !== 'walking' || jumpState.phase !== 'grounded') return
+    posture = { kind: 'sittingDown', seat: nearbySeat, elapsed: 0, from: avatar.position.clone(), fromYaw: avatar.rotation.y }
+    clearKeys(); callbacks.onActivity('transitioning')
+  }
+  function stand() {
+    if (paused || posture.kind !== 'seated') return
+    posture = { kind: 'standingUp', seat: posture.seat, elapsed: 0, from: avatar.position.clone(), fromYaw: avatar.rotation.y }
+    clearKeys(); callbacks.onActivity('transitioning')
+  }
+
   renderer.setAnimationLoop(() => {
     timer.update()
     const dt = Math.min(timer.getDelta(), .05)
     if (disposed) return
-    if (loaded && !paused) {
+    let isWalking = false
+    if (loaded && !paused && posture.kind === 'walking') {
       const horizontal = Number(keys.has('d') || keys.has('arrowright') || actions.has('right')) - Number(keys.has('a') || keys.has('arrowleft') || actions.has('left'))
       const vertical = Number(keys.has('s') || keys.has('arrowdown') || actions.has('backward')) - Number(keys.has('w') || keys.has('arrowup') || actions.has('forward'))
       forward.set(horizontal, 0, vertical)
@@ -192,8 +232,8 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
         const heading = Math.atan2(forward.x, forward.z)
         avatar.rotation.y += Math.atan2(Math.sin(heading - avatar.rotation.y), Math.cos(heading - avatar.rotation.y)) * (1 - Math.exp(-12 * dt))
         stride += distance * 8
-        limbs.forEach((limb, index) => { limb.rotation.x = Math.sin(stride + (index === 0 || index === 3 ? 0 : Math.PI)) * .35 })
-      } else limbs.forEach(limb => { limb.rotation.x *= Math.exp(-12 * dt) })
+        isWalking = distance > .0001
+      }
       let closest: DiscoveryId | null = null
       let closestDistance = 1.9
       for (const place of discoveries) {
@@ -201,23 +241,60 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
         if (distance < closestDistance) { closest = place.id; closestDistance = distance }
       }
       if (closest !== nearby) { nearby = closest; callbacks.onNearby(nearby) }
+      let nextSeat: Seat | null = null
+      let seatDistance = 1.2
+      for (const seat of seats) {
+        const distance = Math.hypot(seat.approach.x - avatar.position.x, seat.approach.z - avatar.position.z)
+        if (distance < seatDistance) { nextSeat = seat; seatDistance = distance }
+      }
+      if (nextSeat !== nearbySeat) { nearbySeat = nextSeat; callbacks.onNearbySeat(nextSeat ? nextSeat.id : null) }
+      jumpState = advanceJump(jumpState, dt)
+      avatar.position.y = floorHeight(avatar.position.x, avatar.position.z) + jumpState.height
+
     }
     const insideCafe = avatar.position.x > cafeRoom.minX && avatar.position.x < cafeRoom.maxX && avatar.position.z > cafeRoom.minZ && avatar.position.z < cafeRoom.maxZ
-    // The café floor has a shallow threshold above the shared lane.
-    avatar.position.y = insideCafe ? .065 : -.015
+    if (walker) {
+      if (posture.kind === 'walking') walker.animate({ kind: 'standing', stride, isWalking, airborne: jumpState.phase === 'airborne' }, dt, timer.getElapsed())
+      else {
+        if (!paused) posture.elapsed += dt
+        let amount = 1
+        if (posture.kind !== 'seated') {
+          const isSitting = posture.kind === 'sittingDown'
+          const progress = Math.min(1, posture.elapsed / (isSitting ? .9 : .65))
+          const eased = THREE.MathUtils.smoothstep(progress, 0, 1)
+          const seat = posture.seat
+          const target = isSitting ? new THREE.Vector3(seat.x, seat.surfaceY - walker.hipBottom, seat.z) : new THREE.Vector3(seat.approach.x, floorHeight(seat.approach.x, seat.approach.z), seat.approach.z)
+          avatar.position.lerpVectors(posture.from, target, eased)
+          const turn = Math.atan2(Math.sin(seat.yaw - posture.fromYaw), Math.cos(seat.yaw - posture.fromYaw))
+          avatar.rotation.y = posture.fromYaw + turn * eased
+          amount = isSitting ? eased : 1 - eased
+          if (progress === 1) {
+            if (isSitting) { posture = { kind: 'seated', seat, elapsed: 0 }; callbacks.onActivity('seated') }
+            else { posture = { kind: 'walking' }; callbacks.onActivity('walking') }
+          }
+        }
+        walker.animate({ kind: 'seated', elapsed: posture.kind === 'seated' ? posture.elapsed : 0, amount }, dt, timer.getElapsed())
+      }
+    }
+    for (const person of people) person.walker.animate({ kind: 'seated', elapsed: timer.getElapsed() + person.offset, amount: 1 }, dt, timer.getElapsed() + person.offset)
     focus.copy(avatar.position); focus.y += 1.15
-    const followDistance = insideCafe ? 2.7 : 6.8
-    offset.set(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch)).multiplyScalar(followDistance)
+    const isSeated = posture.kind !== 'walking'
+    const followDistance = insideCafe ? 2.7 : isSeated ? 3.8 : 6.8
+    // Look across the table when seated, so the opposite chair doesn't hide the player.
+    const cameraYaw = yaw + (isSeated ? .5 : 0)
+    offset.set(Math.sin(cameraYaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(cameraYaw) * Math.cos(pitch)).multiplyScalar(followDistance)
     // Looking up is useful beneath the rafters; keep the camera above ground.
     offset.y = Math.max(offset.y, .35 - focus.y)
     ray.set(focus, rayDirection.copy(offset).normalize())
     ray.far = offset.length()
     const obstruction = ray.intersectObjects(modelMeshes, false)[0]
-    if (obstruction) offset.setLength(Math.max(1.15, obstruction.distance - .25))
+    if (obstruction) offset.setLength(Math.max(.25, obstruction.distance - .18))
     desired.copy(focus).add(offset)
-    if (snapCamera) { cameraPosition.copy(desired); snapCamera = false }
+    if (snapCamera || (obstruction && cameraPosition.distanceTo(focus) > offset.length())) { cameraPosition.copy(desired); snapCamera = false }
     else cameraPosition.lerp(desired, 1 - Math.exp(-9 * dt))
     camera.position.copy(cameraPosition); camera.lookAt(focus)
+    // Tight corners become a clear first-person view instead of the inside of a head.
+    avatar.visible = camera.position.distanceTo(focus) > 1.25
     shadow.position.set(avatar.position.x, insideCafe ? .117 : .043, avatar.position.z)
     renderer.render(scene, camera)
   })
@@ -235,6 +312,8 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   }
   return {
     ready,
+    jump, sit, stand,
+    setCharacterPalette(id: CharacterPaletteId) { if (walker) walker.setPalette(id) },
     setAction(action: MoveAction, active: boolean) { if (active) actions.add(action); else actions.delete(action) },
     setPaused(value: boolean) { paused = value; clearKeys() },
     dispose() {

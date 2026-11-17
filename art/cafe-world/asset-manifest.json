@@ -64,10 +64,12 @@
     "shader": "https://x.com/TsukasaFujiwar2/status/2121969526107779526"
   },
   "buildOrder": [
+    "blender --background --factory-startup --python-exit-code 1 --python art/characters/cafe-walker/build_character.py",
     "blender --background --factory-startup --python-exit-code 1 --python art/cafe-world/melbourne-lane/build_lane.py",
     "blender --background art/cafe-world/melbourne-lane/melbourne-lane.blend --python-exit-code 1 --python art/cafe-world/melbourne-lane/render_lane.py",
     "blender --background --factory-startup --python-exit-code 1 --python art/cafe-world/neighbourhood/build_neighbourhood.py",
     "blender --background art/cafe-world/neighbourhood/neighbourhood.blend --python-exit-code 1 --python art/cafe-world/export_runtime.py -- neighbourhood",
     "blender --background art/cafe-world/neighbourhood/neighbourhood.blend --python-exit-code 1 --python art/cafe-world/neighbourhood/render_neighbourhood.py"
-  ]
+  ],
+  "character": "../characters/cafe-walker/asset-manifest.json"
 }

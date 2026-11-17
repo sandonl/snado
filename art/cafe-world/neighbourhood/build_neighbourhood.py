@@ -196,6 +196,9 @@ for side,y,width,height in frontages:
     if side<0:barrier(-1.8,-.85,y-1.7,y+.17)
     else:barrier(.85,1.8,y+.13,y+1.7)
 layout['rooms']={'cafe':{'minX':-4.3,'maxX':4.3,'minZ':-18.3,'maxZ':-13.05}}
+exec(compile((OUTPUT/'play_area.py').read_text(),str(OUTPUT/'play_area.py'),'exec'),globals())
+play_details=install_play_area(scene,street,OUTPUT)
+apply_layout(layout,play_details)
 layout_path=OUTPUT.parents[2]/'src'/'world'/'layout.json'
 layout_path.write_text(json.dumps(layout,indent=2)+'\n')
 
@@ -222,7 +225,7 @@ scene.render.image_settings.file_format='PNG';scene.view_settings.view_transform
 # New back-side materials get the same illustration treatment as the existing fronts.
 # Equipment has its own softer metal shading and transparent hoppers.
 illustration_code=style_code[style_code.index('def illustrated_materials():'):style_code.index('# Freestyle is the Blender')]
-illustration_code=illustration_code.replace('    for mat in used:\n','    for mat in used:\n        if mat.name.startswith("Equipment · "):continue\n',1)
+illustration_code=illustration_code.replace('    for mat in used:\n','    for mat in used:\n        if mat.name.startswith(("Equipment · ","Walker · ")):continue\n',1)
 exec(illustration_code,globals())
 # Unlike the old opaque façade studies, these panes can be seen through from
 # both inside and outside. The solid mullions and wall shell remain separate.

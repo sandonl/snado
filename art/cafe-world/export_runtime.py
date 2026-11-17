@@ -20,7 +20,7 @@ sources=[]
 seen=set()
 for collection in list(source.collection.children)[:3]:
     for obj in collection.objects:
-        if obj.name in seen or obj.hide_render or obj.hide_viewport:continue
+        if obj.name in seen or obj.hide_render or obj.hide_viewport or obj.name.startswith('Preview resident · '):continue
         seen.add(obj.name)
         if obj.type not in {'MESH','CURVE','FONT'} or obj.name=='Continuous old street':continue
         if obj.type=='CURVE':

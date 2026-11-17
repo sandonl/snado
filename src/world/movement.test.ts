@@ -6,11 +6,11 @@ const wall = { minX: 1, maxX: 3, minZ: -2, maxZ: 2 }
 describe('walking through the neighbourhood', () => {
   test('a long frame cannot carry the player through a building', () => {
     const result = moveThroughWorld({ x: 0, z: 0 }, { x: 5, z: 0 }, [wall])
-    expect(result.x).toBeCloseTo(.74)
+    expect(result.x).toBeCloseTo(.62)
   })
   test('the player slides along a wall instead of losing diagonal movement', () => {
-    const result = moveThroughWorld({ x: .74, z: 0 }, { x: .3, z: -.5 }, [wall])
-    expect(result.x).toBeCloseTo(.74)
+    const result = moveThroughWorld({ x: .62, z: 0 }, { x: .3, z: -.5 }, [wall])
+    expect(result.x).toBeCloseTo(.62)
     expect(result.z).toBeCloseTo(-.5)
   })
   test('the space between two building rows stays walkable', () => {
@@ -29,7 +29,7 @@ describe('walking through the neighbourhood', () => {
     const inside = moveThroughWorld({ x: -2.8, z: -12 }, { x: 0, z: -2 }, obstacles)
     expect(inside.z).toBeCloseTo(-14)
     const atCounter = moveThroughWorld(inside, { x: 0, z: -3 }, obstacles)
-    expect(atCounter.z).toBeCloseTo(-15.86)
+    expect(atCounter.z).toBeCloseTo(-15.74)
   })
   test('the interior aisle connects the entrance to the tiled seating room', () => {
     const inside = moveThroughWorld({ x: -2.8, z: -13.5 }, { x: 0, z: -2 }, obstacles)
@@ -37,9 +37,12 @@ describe('walking through the neighbourhood', () => {
     const seating = moveThroughWorld(inside, { x: 5.6, z: 0 }, obstacles)
     expect(seating.x).toBeCloseTo(2.8)
   })
-  test('both perimeter paths allow walking behind the buildings', () => {
-    for (const x of [-11.5, 11.9]) {
-      expect(moveThroughWorld({ x, z: 8.8 }, { x: 0, z: -35 }, obstacles).z).toBeCloseTo(-26.2)
+  test('the arrival area cannot be used to escape into the scenery', () => {
+    for (const direction of [-1, 1]) {
+      const edge = moveThroughWorld(spawn, { x: direction * 40, z: 0 }, obstacles)
+      expect(Math.abs(edge.x)).toBeCloseTo(1.87)
+      const forward = moveThroughWorld(edge, { x: direction * 2, z: -40 }, obstacles)
+      expect(Math.abs(forward.x)).toBeLessThan(2)
     }
   })
 })
