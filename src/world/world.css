@@ -31,10 +31,12 @@
 .world-story-link{display:flex;align-items:center;justify-content:space-between;text-decoration:none;border-bottom:1px solid #66736a60;padding-bottom:12px;font-size:13px;color:inherit}
 .world-keep-walking{margin-top:25px;padding:0;border:0;background:none;color:#758174;font-size:12px;cursor:pointer}
 @keyframes world-breathe{50%{opacity:.35;transform:rotate(45deg) scale(.85)}}
-@media(max-width:650px){.world-header{padding:19px 18px;gap:12px}.world-header nav>a,.world-header nav>button{padding:9px 11px;font-size:11px}.world-places{right:18px;top:74px}.world-help{left:18px;bottom:22px;gap:0;padding:9px}.world-help>span:first-child,.world-help>span:nth-child(n+3){display:none}.world-touch-controls{display:grid;right:18px;bottom:20px}.world-actions{right:18px;bottom:140px}.world-discover{font-size:13px;padding:11px 13px}.world-dialog{padding:32px 26px}}
+@media(max-width:650px){.world-header{padding:19px 18px;gap:12px}.world-header nav>a,.world-header nav>button{padding:9px 11px;font-size:11px}.world-places{right:18px;top:74px}.world-help{left:18px;bottom:22px;gap:0;padding:9px}.world-help>span:first-child,.world-help>span:nth-child(n+3):not(.world-touch-look){display:none}.world-touch-controls{display:grid;right:18px;bottom:20px}.world-actions{right:18px;bottom:140px}.world-discover{font-size:13px;padding:11px 13px}.world-dialog{padding:32px 26px}}
 @media(prefers-reduced-motion:reduce){.world-loading-mark{animation:none}}
 .world-character{display:flex;gap:8px;width:auto;padding:14px}
 .world-touch-controls .world-jump{font-size:11px}
 .world-character>button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 14px;border:1px solid transparent;background:none;border-radius:3px;font-size:12px;color:inherit;cursor:pointer}
 .world-character>button[aria-pressed=true]{border-color:#7d8b77;background:#e4e8d9}
 .world-palette-swatch{display:block;width:28px;height:28px;border-radius:50%;border:1px solid #34413f25}
+.world-help>.world-touch-look{display:none}
+@media(pointer:coarse){.world-help>.world-desktop-look{display:none}.world-help>.world-touch-look{display:flex}}

@@ -8,12 +8,14 @@ import { advanceJump, groundedJump, startJump, type JumpState } from './jump'
 
 export type MoveAction = 'forward' | 'backward' | 'left' | 'right'
 export type Activity = 'walking' | 'seated' | 'transitioning'
+export type MouseLook = 'click' | 'locked' | 'drag'
 type Posture = { kind: 'walking' } | { kind: 'sittingDown' | 'standingUp'; seat: Seat; elapsed: number; from: THREE.Vector3; fromYaw: number } | { kind: 'seated'; seat: Seat; elapsed: number }
 type Callbacks = {
   onNearby: (id: DiscoveryId | null) => void
   onDiscover: (id: DiscoveryId) => void
   onNearbySeat: (id: SeatId | null) => void
   onActivity: (activity: Activity) => void
+  onMouseLook: (mode: MouseLook) => void
 }
 export type WorldController = ReturnType<typeof createWorld>
 
@@ -143,6 +145,9 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   let yaw = 0
   let pitch = .25
   let dragging = false
+  let dragDistance = 0
+  let mouseLockAvailable = typeof canvas.requestPointerLock === 'function'
+  let requestingMouseLock = false
   let lastPointerX = 0
   let lastPointerY = 0
   let stride = 0
@@ -164,6 +169,10 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   resize.observe(canvas)
   const keyDown = (event: KeyboardEvent) => {
     if (paused || event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return
+    if (event.key === 'Escape' && document.pointerLockElement === canvas) {
+      releaseMouse()
+      return
+    }
     if (event.target instanceof HTMLElement && event.target !== canvas && event.target.closest('button,a,dialog,summary,select')) return
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)) event.preventDefault()
     keys.add(event.key.toLowerCase())
@@ -178,24 +187,68 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   }
   const keyUp = (event: KeyboardEvent) => { keys.delete(event.key.toLowerCase()) }
   const clearKeys = () => { keys.clear(); actions.clear(); dragging = false }
+  const releaseMouse = () => {
+    if (document.pointerLockElement === canvas) document.exitPointerLock()
+  }
+  const mouseLockChanged = () => {
+    requestingMouseLock = false
+    clearKeys()
+    const isLocked = document.pointerLockElement === canvas
+    if (isLocked && paused) releaseMouse()
+    callbacks.onMouseLook(isLocked ? 'locked' : mouseLockAvailable ? 'click' : 'drag')
+  }
+  const mouseLockFailed = () => {
+    if (!requestingMouseLock) return
+    requestingMouseLock = false
+    mouseLockAvailable = false
+    if (!disposed) callbacks.onMouseLook('drag')
+  }
+  const captureMouse = async (event: MouseEvent) => {
+    if (paused || !loaded || dragDistance > 4 || !mouseLockAvailable || requestingMouseLock ||
+        document.pointerLockElement === canvas || ('pointerType' in event && event.pointerType !== 'mouse')) return
+    canvas.focus({ preventScroll: true })
+    requestingMouseLock = true
+    try {
+      await canvas.requestPointerLock()
+      if (disposed || paused) releaseMouse()
+    } catch {
+      mouseLockFailed()
+    }
+  }
+  const look = (horizontal: number, vertical: number) => {
+    yaw -= horizontal * .005
+    pitch = THREE.MathUtils.clamp(pitch + vertical * .003, -.3, .9)
+  }
+  const mouseMove = (event: MouseEvent) => {
+    if (!paused && document.pointerLockElement === canvas) look(event.movementX, event.movementY)
+  }
   const pointerDown = (event: PointerEvent) => {
+    if (paused || event.button !== 0 || document.pointerLockElement === canvas) return
+    dragDistance = 0
     dragging = true; lastPointerX = event.clientX; lastPointerY = event.clientY
     canvas.setPointerCapture(event.pointerId)
   }
   const pointerMove = (event: PointerEvent) => {
-    if (!dragging || paused) return
-    yaw -= (event.clientX - lastPointerX) * .005
-    pitch = THREE.MathUtils.clamp(pitch + (event.clientY - lastPointerY) * .003, -.3, .9)
+    if (!dragging || paused || document.pointerLockElement === canvas) return
+    const horizontal = event.clientX - lastPointerX
+    const vertical = event.clientY - lastPointerY
+    dragDistance += Math.abs(horizontal) + Math.abs(vertical)
+    look(horizontal, vertical)
     lastPointerX = event.clientX; lastPointerY = event.clientY
   }
   const pointerUp = () => { dragging = false }
   window.addEventListener('keydown', keyDown)
   window.addEventListener('keyup', keyUp)
   window.addEventListener('blur', clearKeys)
+  document.addEventListener('pointerlockchange', mouseLockChanged)
+  document.addEventListener('pointerlockerror', mouseLockFailed)
+  canvas.addEventListener('click', captureMouse)
+  canvas.addEventListener('mousemove', mouseMove)
   canvas.addEventListener('pointerdown', pointerDown)
   canvas.addEventListener('pointermove', pointerMove)
   canvas.addEventListener('pointerup', pointerUp)
   canvas.addEventListener('pointercancel', pointerUp)
+  callbacks.onMouseLook(mouseLockAvailable ? 'click' : 'drag')
 
   function floorHeight(x: number, z: number) {
     return x > cafeRoom.minX && x < cafeRoom.maxX && z > cafeRoom.minZ && z < cafeRoom.maxZ ? .065 : -.015
@@ -315,9 +368,13 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
     jump, sit, stand,
     setCharacterPalette(id: CharacterPaletteId) { if (walker) walker.setPalette(id) },
     setAction(action: MoveAction, active: boolean) { if (active) actions.add(action); else actions.delete(action) },
-    setPaused(value: boolean) { paused = value; clearKeys() },
+    setPaused(value: boolean) { paused = value; clearKeys(); if (value) releaseMouse() },
     dispose() {
       disposed = true; renderer.setAnimationLoop(null); resize.disconnect(); timer.dispose(); draco.dispose()
+      document.removeEventListener('pointerlockchange', mouseLockChanged)
+      document.removeEventListener('pointerlockerror', mouseLockFailed)
+      canvas.removeEventListener('click', captureMouse); canvas.removeEventListener('mousemove', mouseMove)
+      releaseMouse()
       window.removeEventListener('keydown', keyDown); window.removeEventListener('keyup', keyUp); window.removeEventListener('blur', clearKeys)
       canvas.removeEventListener('pointerdown', pointerDown); canvas.removeEventListener('pointermove', pointerMove)
       canvas.removeEventListener('pointerup', pointerUp); canvas.removeEventListener('pointercancel', pointerUp)
