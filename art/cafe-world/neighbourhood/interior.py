@@ -1,7 +1,7 @@
 """Warehouse café interior from Sandon's three supplied interior photographs.
 
 Warm timber counter / exposed rafters and plaster (photos 1 and 3), with a
-quieter terracotta-tiled room and low partition (photo 2). A clear entrance
+quieter terracotta-tiled seating area (photo 2). A clear entrance
 connects the bar and seating; measurements below also generate collision boxes.
 Executed by build_neighbourhood.py in its modelling context.
 """
@@ -31,6 +31,7 @@ glass_edge=material('Fluted glass cut rims','A3C1BB',.5)
 crema=material('Coffee crema','CB9F6E',.8)
 bottle_green=material('Interior green bottles','5D7053',.65)
 interior_footprints=[]
+counter_shift_y=-.36
 
 # A matte concrete entry leads into a terracotta dining floor, all at one level.
 box('Interior concrete walking floor',(-1.9,15.65,.087),(4.85,5.3,.018),concrete,.001)
@@ -62,20 +63,20 @@ for y in [13.45,15.65,17.9]:
 for x in [-3.9,-1.1,1.6,4.1]:box('Interior long roof rafter',(x,15.7,3.91),(.1,5.5,.14),ceiling_wood,.002)
 
 # The bar is behind the entry, rather than blocking the doorway.
-box('Interior timber bar carcass',(-1.6,16.65,.55),(4.35,.82,.92),bar_wood,.004)
-box('Interior timber bar overhanging top',(-1.6,16.65,1.04),(4.55,1.02,.09),bar_edge,.004)
-box('Interior bar toe recess',(-1.6,16.205,.16),(4.2,.04,.13),steel_dark,.002)
+box('Interior timber bar carcass',(-1.6,16.65+counter_shift_y,.55),(4.35,.82,.92),bar_wood,.004)
+box('Interior timber bar overhanging top',(-1.6,16.65+counter_shift_y,1.04),(4.55,1.02,.09),bar_edge,.004)
+box('Interior bar toe recess',(-1.6,16.205+counter_shift_y,.16),(4.2,.04,.13),steel_dark,.002)
 for x in [-3.18,-2.13,-1.08,-.03]:
     # Routed arch panels follow the joinery in reference 1, without floating decals.
-    outline=[(x-.47,16.229,.24),(x-.47,16.229,.77),(x-.27,16.229,.91),(x,16.229,.97),(x+.27,16.229,.91),(x+.47,16.229,.77),(x+.47,16.229,.24)]
+    outline=[(x-.47,16.229+counter_shift_y,.24),(x-.47,16.229+counter_shift_y,.77),(x-.27,16.229+counter_shift_y,.91),(x,16.229+counter_shift_y,.97),(x+.27,16.229+counter_shift_y,.91),(x+.47,16.229+counter_shift_y,.77),(x+.47,16.229+counter_shift_y,.24)]
     curve('Interior routed counter arch',outline,.007,bar_edge)
-interior_footprints.append((-3.88,.68,16.12,17.19))
-rod('Interior counter brass foot rail',(-3.5,15.99,.28),(.25,15.99,.28),.017,bar_edge,9)
-for x in [-3.4,-1.6,.15]:rod('Interior foot rail bracket',(x,16.2,.17),(x,15.99,.28),.013,steel_dark,8)
+interior_footprints.append((-3.88,.68,round(16.12+counter_shift_y,2),round(17.19+counter_shift_y,2)))
+rod('Interior counter brass foot rail',(-3.5,15.99+counter_shift_y,.28),(.25,15.99+counter_shift_y,.28),.017,bar_edge,9)
+for x in [-3.4,-1.6,.15]:rod('Interior foot rail bracket',(x,16.2+counter_shift_y,.17),(x,15.99+counter_shift_y,.28),.013,steel_dark,8)
 
 # Equipment controls and dispensing hardware face the staff aisle (+Y).
 exec(compile((OUTPUT/'coffee_equipment.py').read_text(),str(OUTPUT/'coffee_equipment.py'),'exec'),globals())
-build_coffee_equipment(scene,seoul,rig)
+build_coffee_equipment(scene,seoul,rig,counter_y=16.62+counter_shift_y)
 
 def tumbler(name,x,y,z,r=.045,h=.105,has_coffee=False):
     count=32
@@ -102,17 +103,17 @@ def tumbler(name,x,y,z,r=.045,h=.105,has_coffee=False):
 for x,y,r in [(-.01,12.17,.048),(.35,12.24,.041)]:
     tumbler('Courtyard fluted coffee glass',x,y,.836,r,.12,True)
 for row in range(3):
-    for col in range(5):tumbler('Interior rinsed counter glass',-1.15+col*.14,16.44+row*.14,1.09)
+    for col in range(5):tumbler('Interior rinsed counter glass',-1.15+col*.14,16.44+counter_shift_y+row*.14,1.09)
 for x in [-.13,.09,.31]:
-    cylinder('Interior bottle body',(x,16.8,1.22),.057,.27,bottle_green,12)
-    cylinder('Interior bottle shoulder',(x,16.8,1.38),.057,.07,bottle_green,12,top_radius=.023)
-    cylinder('Interior bottle neck',(x,16.8,1.47),.023,.13,bottle_green,10)
-    cylinder('Interior bottle cork',(x,16.8,1.54),.022,.025,bar_edge,10)
-    box('Interior paper bottle label',(x,16.738,1.22),(.075,.008,.13),paper,.001)
-box('Interior folded linen cloth',(-1.7,16.42,1.098),(.27,.21,.02),ivory,.002)
+    cylinder('Interior bottle body',(x,16.8+counter_shift_y,1.22),.057,.27,bottle_green,12)
+    cylinder('Interior bottle shoulder',(x,16.8+counter_shift_y,1.38),.057,.07,bottle_green,12,top_radius=.023)
+    cylinder('Interior bottle neck',(x,16.8+counter_shift_y,1.47),.023,.13,bottle_green,10)
+    cylinder('Interior bottle cork',(x,16.8+counter_shift_y,1.54),.022,.025,bar_edge,10)
+    box('Interior paper bottle label',(x,16.738+counter_shift_y,1.22),(.075,.008,.13),paper,.001)
+box('Interior folded linen cloth',(-1.7,16.42+counter_shift_y,1.098),(.27,.21,.02),ivory,.002)
 for x in [-3.9,-2.0]:
-    box('Interior service back cabinet',(x,17.99,.55),(1.6,.51,.92),bar_wood,.003)
-    box('Interior service back worktop',(x,17.95,1.04),(1.68,.62,.055),steel_silver,.002)
+    box('Interior service back cabinet',(x,18.08,.55),(1.6,.40,.92),bar_wood,.003)
+    box('Interior service back worktop',(x,18.04,1.04),(1.68,.50,.055),steel_silver,.002)
 for z in [1.68,2.24]:
     box('Interior rear floating shelf',(-2.85,18.1,z),(2.9,.32,.045),bar_edge,.002)
     for i in range(7):
@@ -122,9 +123,7 @@ box('Interior narrow cloth hanging',(.2,18.255,2.5),(.48,.012,1.28),paper,.001)
 text('Interior quiet cloth calligraphy','平\n和',(.2,18.24,2.52),.31,steel_dark,korean=True)
 rod('Interior cloth top rail',(-.08,18.23,3.17),(.48,18.23,3.17),.014,bar_edge,8)
 
-# The second reference supplies a low partition, tiled floor and long calm seating.
-box('Interior low seating partition',(.94,17.2,.67),(.1,2.2,1.15),plaster_pale,.002)
-interior_footprints.append((.87,1.02,16.1,18.3))
+# The tiled seating stays open along the full length of the banquette.
 box('Interior long banquette base',(3.94,15.9,.3),(.58,3.85,.4),bar_wood,.003)
 box('Interior long leather seat',(3.83,15.9,.54),(.7,3.85,.13),leather,.006)
 box('Interior banquette leather back',(4.22,15.9,.87),(.12,3.85,.66),leather,.006)

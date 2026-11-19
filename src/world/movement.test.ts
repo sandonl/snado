@@ -42,7 +42,7 @@ describe('walking through the neighbourhood', () => {
     const inside = moveThroughWorld({ x: -2.8, z: -12 }, { x: 0, z: -2 }, obstacles)
     expect(inside.z).toBeCloseTo(-14)
     const atCounter = moveThroughWorld(inside, { x: 0, z: -3 }, obstacles)
-    expect(atCounter.z).toBeCloseTo(-15.74)
+    expect(atCounter.z).toBeCloseTo(-15.38)
   })
   test.each([
     { shop: 'restaurant', entranceZ: 2.39, insideX: -4.25, roomZ: 3.5 },
@@ -59,11 +59,14 @@ describe('walking through the neighbourhood', () => {
     const aligned = moveThroughWorld(room, { x: 0, z: entranceZ - roomZ }, obstacles)
     expect(moveThroughWorld(aligned, { x: -insideX, z: 0 }, obstacles).x).toBeCloseTo(lane.x)
   })
-  test('the interior aisle connects the entrance to the tiled seating room', () => {
-    const inside = moveThroughWorld({ x: -2.8, z: -13.5 }, { x: 0, z: -2 }, obstacles)
-    expect(inside.z).toBeCloseTo(-15.5)
-    const seating = moveThroughWorld(inside, { x: 5.6, z: 0 }, obstacles)
-    expect(seating.x).toBeCloseTo(2.8)
+  test('the open dining aisle reaches the rear of the banquette', () => {
+    const inside = moveThroughWorld({ x: -2.8, z: -13.5 }, { x: 0, z: -1.6 }, obstacles)
+    const diningAisle = moveThroughWorld(inside, { x: 4.23, z: 0 }, obstacles)
+    expect(diningAisle.x).toBeCloseTo(1.43)
+    const rearSeating = moveThroughWorld(diningAisle, { x: 0, z: -2.3 }, obstacles)
+    expect(rearSeating.z).toBeCloseTo(-17.4)
+    const banquette = moveThroughWorld(rearSeating, { x: 3, z: 0 }, obstacles)
+    expect(banquette.x).toBeCloseTo(3.07)
   })
   test('the wider arrival footway connects back to the lane and stops at the kerb', () => {
     const kerb = moveThroughWorld(spawn, { x: 0, z: 4 }, obstacles)

@@ -61,9 +61,7 @@ def install_play_area(scene,street,folder):
         box('courtyard timber rail',(x,10.5,.79),(.08,6.1,.08),timber)
     box('courtyard side closure',(5.4,13.65,.4),(1.5,.35,.74),plaster)
     for x in [4.95,5.4,5.85]:greenery((x,13.65,.91))
-    box('café low room divider',(2.72,16.2,.55),(3.35,.10,.9),plaster)
-    box('café divider top',(2.72,16.2,1.01),(3.4,.14,.045),timber)
-    barriers.extend([(-5.5,-5,7.4,13.6),(6.1,6.6,7.4,13.6),(1.045,4.4,16.15,16.25),(3.9,5.7,9.08,9.53)])
+    barriers.extend([(-5.5,-5,7.4,13.6),(6.1,6.6,7.4,13.6),(3.9,5.7,9.08,9.53)])
     # Two low seats along the fabrication lane, kept clear of the walking line.
     for y in [-3.63,-4.9]:
         box('lane timber stool',(-1.41,y,.561),(.43,.43,.05),timber)
@@ -123,12 +121,12 @@ def install_play_area(scene,street,folder):
                 obj.data.materials[index]=material_copies[old]
     bpy.data.collections.remove(loaded.collections[0])
     bpy.context.view_layer.update()
-    return {'walkableAreas':[{'minX':-5.35,'maxX':5.35,'minZ':5.48,'maxZ':9.6},{'minX':-1.9,'maxX':1.9,'minZ':-8.8,'maxZ':6.6},{'minX':-.9,'maxX':5.74,'minZ':-1.82,'maxZ':2.52},{'minX':-5,'maxX':6.1,'minZ':-13.6,'maxZ':-7.4},{'minX':-4.35,'maxX':4.35,'minZ':-16.15,'maxZ':-12.4}], 'seats':seats,'residents':residents,'barriers':barriers}
+    return {'walkableAreas':[{'minX':-5.35,'maxX':5.35,'minZ':5.48,'maxZ':9.6},{'minX':-1.9,'maxX':1.9,'minZ':-8.8,'maxZ':6.6},{'minX':-.9,'maxX':5.74,'minZ':-1.82,'maxZ':2.52},{'minX':-5,'maxX':6.1,'minZ':-13.6,'maxZ':-7.4},{'minX':-4.35,'maxX':4.35,'minZ':-16.15,'maxZ':-12.4},{'minX':.90,'maxX':4.35,'minZ':-18.12,'maxZ':-14.9}], 'seats':seats,'residents':residents,'barriers':barriers}
 
 
 def apply_layout(layout,details):
     layout['walkableAreas']=details['walkableAreas'];layout['seats']=details['seats'];layout['residents']=details['residents']
-    layout['bounds']={'minX':-5.35,'maxX':6.1,'minZ':-16.15,'maxZ':9.6}
+    layout['bounds']={'minX':-5.35,'maxX':6.1,'minZ':-18.12,'maxZ':9.6}
     for x0,x1,y0,y1 in details['barriers']:
         obstacle={'minX':x0,'maxX':x1,'minZ':-y1,'maxZ':-y0}
         if obstacle not in layout['obstacles']:layout['obstacles'].append(obstacle)

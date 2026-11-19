@@ -171,6 +171,7 @@ barrier(-9.6,-9.4,13.02,17.65);barrier(-4.78,-4.6,13.02,17.65);barrier(-9.6,-4.6
 barrier(-8.5,-5.6,14.98,15.9)
 barrier(-4.44,1.94,18.4,22.22);barrier(7.47,11.16,14.84,21.84);barrier(4.34,7.66,24.05,26.2)
 barrier(-.38,.7,11.65,12.7);barrier(2.8,4.0,11.9,12.4)
+layout['counterShiftZ']=round(-counter_shift_y,2)
 layout['rooms']={'cafe':{'minX':-4.3,'maxX':4.3,'minZ':-18.3,'maxZ':-13.05}}
 exec(compile((OUTPUT/'play_area.py').read_text(),str(OUTPUT/'play_area.py'),'exec'),globals())
 play_details=install_play_area(scene,street,OUTPUT)

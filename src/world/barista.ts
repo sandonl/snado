@@ -1,14 +1,15 @@
 import * as THREE from 'three'
 import type { Walker } from './character'
+import layout from './layout.json'
 
 const cycleLength = 16
 const brewStart = 7.2
 const brewEnd = 10.1
 const collectAt = 10.65
 const serveAt = 13
-const groupHead = new THREE.Vector3(-2.625, 1.316, -16.88)
-const dripTray = new THREE.Vector3(-2.625, 1.167, -16.925)
-const servingSpot = new THREE.Vector3(-1.41, 1.085, -16.86)
+const groupHead = new THREE.Vector3(-2.625, 1.316, -16.88 + layout.counterShiftZ)
+const dripTray = new THREE.Vector3(-2.625, 1.167, -16.925 + layout.counterShiftZ)
+const servingSpot = new THREE.Vector3(-1.41, 1.085, -16.86 + layout.counterShiftZ)
 const filterOffset = new THREE.Vector3(-.035, .018, .09)
 const counterHeight = .065
 
@@ -138,12 +139,12 @@ export function createBarista(source: Walker) {
     const interpolate = (start: number, end: number) => THREE.MathUtils.lerp(start, end, progress)
     const x = interpolate(from.x, to.x)
     const z = interpolate(from.z, to.z)
-    walker.root.position.set(x, counterHeight, z)
+    walker.root.position.set(x, counterHeight, z + layout.counterShiftZ)
     const isMoving = Math.abs(to.x - from.x) > .12 && time > from.time && time < to.time
     walker.animate({ kind: 'standing', stride: x * 26, isWalking: isMoving, airborne: false }, dt, elapsed)
 
     rightTarget.set(interpolate(from.hand[0], to.hand[0]), interpolate(from.hand[1], to.hand[1]),
-      interpolate(from.hand[2], to.hand[2]))
+      interpolate(from.hand[2], to.hand[2]) + layout.counterShiftZ)
     right.reach(rightTarget)
     const isTamping = time >= 3.4 && time < 5.35
     tamper.visible = isTamping

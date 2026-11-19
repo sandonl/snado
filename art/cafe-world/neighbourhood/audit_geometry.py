@@ -48,15 +48,16 @@ for name,x,y,z,dx,dy in [
     ('Side-lane block inner side',6.6,18.7,4.7,1,0),
     ('Far workshop rear',6,27.0,3.0,0,-1),
 ]:probe(name,(x,y,z),(dx,dy,0),1.35,True)
-probe('Interior entry aisle stays clear',(-2.8,13.25,1.4),(0,1,0),2.35,False)
-probe('Full timber bar exists',(-2.5,15.6,.8),(0,1,0),1.3,True,'Interior timber bar')
-probe('Quiet seating partition exists',(.75,17.4,.7),(1,0,0),.4,True,'Interior low seating partition')
+probe('Interior entry aisle stays clear',(-2.8,13.25,1.4),(0,1,0),2.0,False)
+probe('Full timber bar exists',(-2.5,15.3,.8),(0,1,0),1.3,True,'Interior timber bar')
+probe('The aisle beside the window seating stays open',(1.42,15.30,.7),(0,1,0),2.50,False)
+probe('The barista has a clear aisle behind the counter',(-4.1,17.20,.81),(1,0,0),4.6,False)
 # Probe the actual working surfaces from the fixed staff and customer aisles.
 # Reversing an assembly or putting its controls on the customer side fails here.
-probe('Espresso controls face the barista aisle',(-3.015,17.3,1.50),(0,-1,0),1,True,'espresso operator',1)
-probe('Espresso finished rear faces customers',(-2.70,15.9,1.38),(0,1,0),1,True,'espresso customer',-1)
+probe('Espresso controls face the barista aisle',(-3.015,17.0,1.50),(0,-1,0),1,True,'espresso operator',1)
+probe('Espresso finished rear faces customers',(-2.70,15.54,1.38),(0,1,0),1,True,'espresso customer',-1)
 for x in [-3.51,-2.04]:
-    probe('Grinder controls face the barista aisle',(x+.034,17.3,1.354),(0,-1,0),1,True,'grinder operator display',1)
+    probe('Grinder controls face the barista aisle',(x+.034,17.0,1.354),(0,-1,0),1,True,'grinder operator display',1)
 report={'passed':all(row['passed'] for row in probes),'probeCount':len(probes),'probes':probes,'scope':'Actual saved Blender geometry: lane, print yard and café entrance clear; sampled side/rear surfaces, eave closures and roofs present; coffee equipment operating faces checked from the staff aisle. This does not claim furnished interiors behind closed doors.'}
 (Path(__file__).resolve().parent/'geometry-audit.json').write_text(json.dumps(report,indent=2))
 print('NEIGHBOURHOOD_GEOMETRY_AUDIT '+json.dumps(report),flush=True)

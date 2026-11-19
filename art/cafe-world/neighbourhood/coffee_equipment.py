@@ -9,7 +9,7 @@ import math
 from mathutils import Vector
 
 
-def build_coffee_equipment(scene, collection, camera_collection):
+def build_coffee_equipment(scene, collection, camera_collection, counter_y=16.26):
     for obj in list(scene.objects):
         if obj.name.startswith(('Interior espresso ', 'Interior grinder ', 'Coffee equipment · ')):
             bpy.data.objects.remove(obj, do_unlink=True)
@@ -110,7 +110,7 @@ def build_coffee_equipment(scene, collection, camera_collection):
         if filled:cylinder(name+' espresso',(x,y,z+.027),.022,.040,bean,20,top_radius=.029)
 
     root=bpy.data.objects.new('Coffee equipment · two-group espresso machine',None);collection.objects.link(root)
-    root.location=(-2.82,16.62,1.085)
+    root.location=(-2.82,counter_y,1.085)
     root['operatingSide']='+Y, behind the counter';root['customerSide']='-Y, towards the café entrance'
     # A profiled boiler case leaves a genuine recess below the operator fascia.
     profile=[(-.235,.065),(.14,.065),(.14,.285),(.25,.285),(.25,.445),(.18,.49),(-.17,.49),(-.235,.405)]
@@ -179,7 +179,7 @@ def build_coffee_equipment(scene, collection, camera_collection):
     for x in [-.22,0,.22]:serving_glass('espresso fluted warming glass',x,-.035,.508,False)
 
     for x in [-3.51,-2.04]:
-        root=bpy.data.objects.new('Coffee equipment · burr grinder',None);collection.objects.link(root);root.location=(x,16.62,1.085)
+        root=bpy.data.objects.new('Coffee equipment · burr grinder',None);collection.objects.link(root);root.location=(x,counter_y,1.085)
         root['operatingSide']='+Y, behind the counter'
         box('grinder weighted base',(0,.015,.025),(.215,.29,.05),rubber,.006)
         box('grinder base stainless edge',(0,.025,.051),(.205,.265,.012),chrome,.002)
@@ -209,8 +209,8 @@ def build_coffee_equipment(scene, collection, camera_collection):
         cylinder('grinder lid grip',(0,-.025,.659),.019,.018,chrome,16)
 
     for name,position,target in [
-        ('Coffee equipment customer view',(-1.5,14.95,1.78),(-2.75,16.62,1.4)),
-        ('Coffee equipment operator view',(-1.5,17.85,1.93),(-2.75,16.62,1.4)),
+        ('Coffee equipment customer view',(-1.5,counter_y-1.67,1.78),(-2.75,counter_y,1.4)),
+        ('Coffee equipment operator view',(-1.5,counter_y+1.23,1.93),(-2.75,counter_y,1.4)),
     ]:
         camera=scene.objects.get(name)
         if camera is None:

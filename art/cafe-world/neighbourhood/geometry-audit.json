@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "probeCount": 35,
+  "probeCount": 36,
   "probes": [
     {
       "name": "Arrival lane stays clear at walking height",
@@ -153,9 +153,14 @@
       "hit": "Interior timber bar carcass"
     },
     {
-      "name": "Quiet seating partition exists",
+      "name": "The aisle beside the window seating stays open",
       "passed": true,
-      "hit": "Interior low seating partition"
+      "hit": null
+    },
+    {
+      "name": "The barista has a clear aisle behind the counter",
+      "passed": true,
+      "hit": null
     },
     {
       "name": "Espresso controls face the barista aisle",
