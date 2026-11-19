@@ -1,0 +1,191 @@
+{
+  "passed": true,
+  "probeCount": 36,
+  "probes": [
+    {
+      "name": "Arrival lane stays clear at walking height",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Lane opens into the shared courtyard",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Caf\u00e9 bay remains open",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Caf\u00e9 rear eave is enclosed",
+      "passed": true,
+      "hit": "Caf\u00e9 rear roof closure"
+    },
+    {
+      "name": "Caf\u00e9 east window header is enclosed",
+      "passed": true,
+      "hit": "Caf\u00e9 east full window header"
+    },
+    {
+      "name": "Caf\u00e9 west eave is enclosed",
+      "passed": true,
+      "hit": "Caf\u00e9 west roof closure"
+    },
+    {
+      "name": "Workshop rear eave is enclosed",
+      "passed": true,
+      "hit": "Workshop rear roof closure"
+    },
+    {
+      "name": "Caf\u00e9 roof is closed",
+      "passed": true,
+      "hit": "Workshop \u00b7 Old low workshop roof sheet"
+    },
+    {
+      "name": "Fabrication lane opens into the print yard",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Print room display has a window",
+      "passed": true,
+      "hit": "Print room display glazing"
+    },
+    {
+      "name": "Restaurant timber shopfront faces the arrival street",
+      "passed": true,
+      "hit": "Corner restaurant street front display upright.002"
+    },
+    {
+      "name": "Restaurant windows look into the room",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Restaurant has an open lane entrance",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Market has an open lane entrance",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Studio has an open lane entrance",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Restaurant has a set dining table",
+      "passed": true,
+      "hit": "Restaurant set plate.001"
+    },
+    {
+      "name": "Market has a checkout inside",
+      "passed": true,
+      "hit": "Market till"
+    },
+    {
+      "name": "Studio has a potter\u2019s wheel",
+      "passed": true,
+      "hit": "Studio clay bowl on wheel"
+    },
+    {
+      "name": "Market canvas projects above the footway",
+      "passed": true,
+      "hit": "Corner market street front striped awning.005"
+    },
+    {
+      "name": "Metal cutting shop keeps its roller shutter",
+      "passed": true,
+      "hit": "Metal cutting shop roller shutter"
+    },
+    {
+      "name": "Arrival street tree is rooted in the footway",
+      "passed": true,
+      "hit": "Lane canopy tree trunk"
+    },
+    {
+      "name": "Rear brick block rear",
+      "passed": true,
+      "hit": "Workshop \u00b7 Older rear red brick building"
+    },
+    {
+      "name": "Rear brick block west",
+      "passed": true,
+      "hit": "Workshop \u00b7 Older rear red brick building"
+    },
+    {
+      "name": "Rear brick block east",
+      "passed": true,
+      "hit": "Workshop \u00b7 Older rear red brick building"
+    },
+    {
+      "name": "Side-lane block rear",
+      "passed": true,
+      "hit": "Workshop \u00b7 Old two-storey side-lane plaster block"
+    },
+    {
+      "name": "Side-lane block outer side",
+      "passed": true,
+      "hit": "Side-lane building full side window centre mullion.013"
+    },
+    {
+      "name": "Side-lane block inner side",
+      "passed": true,
+      "hit": "Side-lane building full side window centre mullion.004"
+    },
+    {
+      "name": "Far workshop rear",
+      "passed": true,
+      "hit": "Workshop \u00b7 Distant side-lane shed"
+    },
+    {
+      "name": "Interior entry aisle stays clear",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Full timber bar exists",
+      "passed": true,
+      "hit": "Interior timber bar carcass"
+    },
+    {
+      "name": "The aisle beside the window seating stays open",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "The barista has a clear aisle behind the counter",
+      "passed": true,
+      "hit": null
+    },
+    {
+      "name": "Espresso controls face the barista aisle",
+      "passed": true,
+      "hit": "Coffee equipment \u00b7 espresso operator brew switch surround",
+      "normalY": 1.0
+    },
+    {
+      "name": "Espresso finished rear faces customers",
+      "passed": true,
+      "hit": "Coffee equipment \u00b7 espresso customer rear panel",
+      "normalY": -1.0
+    },
+    {
+      "name": "Grinder controls face the barista aisle",
+      "passed": true,
+      "hit": "Coffee equipment \u00b7 grinder operator display",
+      "normalY": 1.0
+    },
+    {
+      "name": "Grinder controls face the barista aisle",
+      "passed": true,
+      "hit": "Coffee equipment \u00b7 grinder operator display.001",
+      "normalY": 1.0
+    }
+  ],
+  "scope": "Actual saved Blender geometry: lane, print yard and caf\u00e9 entrance clear; sampled side/rear surfaces, eave closures and roofs present; coffee equipment operating faces checked from the staff aisle. This does not claim furnished interiors behind closed doors."
+}

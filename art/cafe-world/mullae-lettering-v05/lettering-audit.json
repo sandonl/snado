@@ -1,0 +1,226 @@
+{
+  "camera": "Mullae corner at walking height",
+  "textObjects": 18,
+  "cameraBlockedSamples": 0,
+  "surfaceBlockedSamples": 0,
+  "wrongBackingSamples": 0,
+  "rows": [
+    {
+      "name": "Rear building old Hangul",
+      "samples": 404,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Retained factory sign",
+      "samples": 408,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Small old sign subline",
+      "samples": 408,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Old side-lane shop Hangul",
+      "samples": 424,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Weathered long warehouse fascia retained workshop lettering",
+      "samples": 440,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Small coffee lettering",
+      "samples": 416,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Coffee corner lightbox",
+      "samples": 440,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Rest stamp character",
+      "samples": 428,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Ghost of original workshop name",
+      "samples": 404,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Ghost of original workshop trade",
+      "samples": 412,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Window handwritten welcome",
+      "samples": 428,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Door handwritten invitation",
+      "samples": 412,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Mullae corner plaque title",
+      "samples": 408,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Mullae corner plaque English",
+      "samples": 456,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Small hand-painted alley note",
+      "samples": 408,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Small café board coffee",
+      "samples": 404,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Small café board hours",
+      "samples": 424,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    },
+    {
+      "name": "Small café board menu",
+      "samples": 596,
+      "cameraBlocked": 0,
+      "surfaceBlocked": 0,
+      "wrongBackingSamples": 0,
+      "blockers": {
+        "camera": {},
+        "surface": {},
+        "wrongBacking": {}
+      }
+    }
+  ],
+  "passed": true
+}
