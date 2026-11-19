@@ -41,7 +41,7 @@ for group_name,original in sources:
         is_text=original.type=='FONT'
         key=(original_mat.name,is_text)
         if key not in material_cache:
-            prefix='text/' if is_text else ('glass/' if any(label in original_mat.name for label in ['small old glass panes','hopper glazing']) else 'surface/')
+            prefix='text/' if is_text else ('glass/' if any(label in original_mat.name for label in ['small old glass panes','hopper glazing','shop display glazing','drinkware glazing']) else 'surface/')
             mat=bpy.data.materials.new(prefix+original_mat.name)
             mat.diffuse_color=original_mat.diffuse_color
             mat.use_nodes=True

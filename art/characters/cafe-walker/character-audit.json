@@ -2,7 +2,7 @@
   "passed": true,
   "heightMetres": 1.611,
   "soleHeightMetres": 0.05,
-  "meshCount": 41,
+  "meshCount": 44,
   "rigParts": [
     "leftArm",
     "rightArm",

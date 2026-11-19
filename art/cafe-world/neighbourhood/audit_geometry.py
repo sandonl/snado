@@ -8,6 +8,8 @@ scene=bpy.context.scene
 bpy.context.view_layer.update()
 depsgraph=bpy.context.evaluated_depsgraph_get()
 probes=[]
+assert not any('mullae' in obj.data.body.lower() or '문래' in obj.data.body
+               for obj in scene.objects if obj.type=='FONT'), 'A visible sign uses the reference place name.'
 def probe(name,origin,direction,distance,expected_hit,expected_name=None,expected_normal_y=None):
     hit,location,normal,index,obj,matrix=scene.ray_cast(depsgraph,Vector(origin),Vector(direction),distance=distance)
     correct_name=expected_name is None or (hit and expected_name in obj.name)
@@ -16,6 +18,7 @@ def probe(name,origin,direction,distance,expected_hit,expected_name=None,expecte
     if expected_normal_y is not None:row['normalY']=round(normal.y,3) if hit else None
     probes.append(row)
 
+probe('Arrival lane stays clear at walking height',(0,-8.8,1.4),(0,1,0),16.4,False)
 probe('Lane opens into the shared courtyard',(0,7.6,1.4),(0,1,0),4.6,False)
 probe('Café bay remains open',(-2.8,12,1.5),(0,1,0),1.35,False)
 probe('Café rear eave is enclosed',(3.0,19.2,4.05),(0,-1,0),1.1,True)
@@ -23,12 +26,19 @@ probe('Café east window header is enclosed',(5.3,15.4,3.6),(-1,0,0),1.0,True)
 probe('Café west eave is enclosed',(-5.0,17.9,3.92),(1,0,0),.8,True)
 probe('Workshop rear eave is enclosed',(-7.2,18.2,3.82),(0,-1,0),1,True)
 probe('Café roof is closed',(2.8,16.1,6),(0,0,-1),2.3,True)
-for index,(side,y,height) in enumerate([(-1,-3.5,5.35),(-1,.9,6.25),(-1,5.35,4.35),(1,-3.5,4.8),(1,.9,6.45),(1,5.35,4.55)]):
-    probe('Lane building '+str(index)+' rear surface',(side*6.85,y,1.2),(-side,0,0),1.3,True,'Lane')
-    probe('Lane building '+str(index)+' roof',(side*4.1,y,height+1),(0,0,-1),1.4,True)
-for side in [-1,1]:
-    probe('Entry end has actual window geometry',(side*3,-6.6,1.62),(0,1,0),1.2,True,'Lane exposed end sash')
-    probe('Outer rear has actual window geometry',(side*6.85,-3.5-4.2*.27,2.05),(-side,0,0),1.3,True,'Lane rear sash')
+probe('Fabrication lane opens into the print yard',(0,-.35,1.45),(1,0,0),5.4,False)
+probe('Print room display has a window',(4.9,-.81,1.42),(1,0,0),1.15,True,'Print room display')
+probe('Restaurant timber shopfront faces the arrival street',(-4.79,-7.4,1.44),(0,1,0),1.7,True,'Corner restaurant street front')
+probe('Restaurant windows look into the room',(-4.42,-5.66,1.89),(0,1,0),1.0,False)
+probe('Restaurant has an open lane entrance',(-1.1,-2.39,1.5),(-1,0,0),2.6,False)
+probe('Market has an open lane entrance',(1.1,-4.58,1.5),(1,0,0),2.6,False)
+probe('Studio has an open lane entrance',(-1.1,.31,1.5),(-1,0,0),2.6,False)
+probe('Restaurant has a set dining table',(-5.28,-3.87,2.2),(0,0,-1),1.55,True,'Restaurant set plate')
+probe('Market has a checkout inside',(5.92,-4.54,2.3),(0,0,-1),1.2,True,'Market till')
+probe('Studio has a potter’s wheel',(-5.67,-.62,1.70),(0,0,-1),.80,True,'Studio clay bowl')
+probe('Market canvas projects above the footway',(4.45,-6.02,3.2),(0,0,-1),1,True,'Corner market street front striped awning')
+probe('Metal cutting shop keeps its roller shutter',(0,5.1,1.3),(-1,0,0),2.25,True,'Metal cutting shop roller shutter')
+probe('Arrival street tree is rooted in the footway',(-3.9,-9.05,.7),(0,1,0),1.3,True,'Lane canopy tree trunk')
 for name,x,y,z,dx,dy in [
     ('Rear brick block rear',-.4,23.1,4.2,0,-1),
     ('Rear brick block west',-5.3,20.1,4.2,1,0),
@@ -47,7 +57,7 @@ probe('Espresso controls face the barista aisle',(-3.015,17.3,1.50),(0,-1,0),1,T
 probe('Espresso finished rear faces customers',(-2.70,15.9,1.38),(0,1,0),1,True,'espresso customer',-1)
 for x in [-3.51,-2.04]:
     probe('Grinder controls face the barista aisle',(x+.034,17.3,1.354),(0,-1,0),1,True,'grinder operator display',1)
-report={'passed':all(row['passed'] for row in probes),'probeCount':len(probes),'probes':probes,'scope':'Actual saved Blender geometry: connector and café entrance clear; sampled side/rear surfaces, eave closures and roofs present; coffee equipment operating faces checked from the staff aisle. This does not claim furnished interiors behind closed doors.'}
+report={'passed':all(row['passed'] for row in probes),'probeCount':len(probes),'probes':probes,'scope':'Actual saved Blender geometry: lane, print yard and café entrance clear; sampled side/rear surfaces, eave closures and roofs present; coffee equipment operating faces checked from the staff aisle. This does not claim furnished interiors behind closed doors.'}
 (Path(__file__).resolve().parent/'geometry-audit.json').write_text(json.dumps(report,indent=2))
 print('NEIGHBOURHOOD_GEOMETRY_AUDIT '+json.dumps(report),flush=True)
 if not report['passed']:raise RuntimeError('A world route or enclosure probe failed.')

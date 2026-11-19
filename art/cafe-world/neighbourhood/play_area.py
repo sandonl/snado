@@ -59,23 +59,25 @@ def install_play_area(scene,street,folder):
             box('courtyard planter',(x,y,.39),(.5,1.7,.72),plaster)
             for dy in [-.45,.1,.55]:greenery((x,y+dy,.91))
         box('courtyard timber rail',(x,10.5,.79),(.08,6.1,.08),timber)
-    for x in [-2.5,2.5]:
-        box('arrival planter',(x,-8.55,.4),(.5,2.1,.74),plaster)
-        for y in [-9.1,-8.5,-8.0]:greenery((x,y,.93))
-    box('arrival end rail',(0,-9.65,.24),(4.6,.1,.12),timber)
-    for x in [-2.15,0,2.15]:box('arrival rail post',(x,-9.65,.14),(.08,.08,.26),metal)
     box('courtyard side closure',(5.4,13.65,.4),(1.5,.35,.74),plaster)
     for x in [4.95,5.4,5.85]:greenery((x,13.65,.91))
     box('café low room divider',(2.72,16.2,.55),(3.35,.10,.9),plaster)
     box('café divider top',(2.72,16.2,1.01),(3.4,.14,.045),timber)
-    barriers.extend([(-5.5,-5,7.4,13.6),(6.1,6.6,7.4,13.6),(-2.75,-2.25,-9.6,-7.5),(2.25,2.75,-9.6,-7.5),(-2.3,2.3,-9.7,-9.6),(1.045,4.4,16.15,16.25),(3.9,5.7,9.08,9.53)])
+    barriers.extend([(-5.5,-5,7.4,13.6),(6.1,6.6,7.4,13.6),(1.045,4.4,16.15,16.25),(3.9,5.7,9.08,9.53)])
+    # Two low seats along the fabrication lane, kept clear of the walking line.
+    for y in [-3.63,-4.9]:
+        box('lane timber stool',(-1.41,y,.561),(.43,.43,.05),timber)
+        for x in [-1.56,-1.26]:
+            for dy in [-.15,.15]:
+                box('lane steel stool leg',(x,y+dy,.29),(.035,.035,.50),metal)
+        barriers.append((-1.65,-1.15,y-.24,y+.24))
     seats=[
-        {'id':'laneChair','label':'Café chair','x':-1.3,'z':3.63,'surfaceY':.586,'yaw':0,'approach':{'x':-.36,'z':3.63}},
+        {'id':'laneChair','label':'Lane stool','x':-1.41,'z':3.63,'surfaceY':.586,'yaw':0,'approach':{'x':-.36,'z':3.63}},
         {'id':'courtyardBench','label':'Courtyard bench','x':4.65,'z':-9.3,'surfaceY':.5475,'yaw':0,'approach':{'x':4.65,'z':-8.4}},
         {'id':'cafeStool','label':'Window seat','x':2.12,'z':-14.6,'surfaceY':.58,'yaw':math.pi/2,'approach':{'x':1.43,'z':-14.6}},
     ]
     residents=[
-        {'id':'laneRegular','x':-1.3,'z':4.9,'surfaceY':.586,'yaw':math.pi,'palette':'clay','offset':1.1},
+        {'id':'laneRegular','x':-1.41,'z':4.9,'surfaceY':.586,'yaw':math.pi,'palette':'clay','offset':1.1},
         {'id':'courtyardRegular','x':3.465,'z':-10.62,'surfaceY':.53,'yaw':math.pi/3,'palette':'ink','offset':4.2},
     ]
     for seat in seats+residents:
@@ -121,12 +123,12 @@ def install_play_area(scene,street,folder):
                 obj.data.materials[index]=material_copies[old]
     bpy.data.collections.remove(loaded.collections[0])
     bpy.context.view_layer.update()
-    return {'walkableAreas':[{'minX':-2.25,'maxX':2.25,'minZ':5.5,'maxZ':9.6},{'minX':-1.9,'maxX':1.9,'minZ':-8.8,'maxZ':6.6},{'minX':-5,'maxX':6.1,'minZ':-13.6,'maxZ':-7.4},{'minX':-4.35,'maxX':4.35,'minZ':-16.15,'maxZ':-12.4}], 'seats':seats,'residents':residents,'barriers':barriers}
+    return {'walkableAreas':[{'minX':-5.35,'maxX':5.35,'minZ':5.48,'maxZ':9.6},{'minX':-1.9,'maxX':1.9,'minZ':-8.8,'maxZ':6.6},{'minX':-.9,'maxX':5.74,'minZ':-1.82,'maxZ':2.52},{'minX':-5,'maxX':6.1,'minZ':-13.6,'maxZ':-7.4},{'minX':-4.35,'maxX':4.35,'minZ':-16.15,'maxZ':-12.4}], 'seats':seats,'residents':residents,'barriers':barriers}
 
 
 def apply_layout(layout,details):
     layout['walkableAreas']=details['walkableAreas'];layout['seats']=details['seats'];layout['residents']=details['residents']
-    layout['bounds']={'minX':-5,'maxX':6.1,'minZ':-16.15,'maxZ':9.6}
+    layout['bounds']={'minX':-5.35,'maxX':6.1,'minZ':-16.15,'maxZ':9.6}
     for x0,x1,y0,y1 in details['barriers']:
         obstacle={'minX':x0,'maxX':x1,'minZ':-y1,'maxZ':-y0}
         if obstacle not in layout['obstacles']:layout['obstacles'].append(obstacle)

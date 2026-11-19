@@ -10,7 +10,7 @@
   "runtimeAxes": "Y-up, facing +Z",
   "visualDirection": "Rounded limbs, enlarged head, curved cap visor, small expressive face, canvas backpack and muted café colours, inspired by the character reference supplied in chat.",
   "provenance": "Original authored geometry and materials. No downloaded third-party character assets or textures.",
-  "rig": "Named object joints for hips, knees, shoulders and elbows, plus eyes, upper body and a held cup. The shared runtime animates walking, blinking, jumping, sitting, sipping and standing; residents use clones with independent palettes.",
+  "rig": "Named object joints for hips, knees, shoulders and elbows, plus eyes, upper body and a held fluted glass. The shared runtime animates walking, blinking, jumping, sitting, sipping and standing; residents use clones with independent palettes.",
   "palettes": "Fern, Clay and Ink cap/outfit combinations; defined in src/world/character.ts and selectable in the Character menu.",
   "collisionRadiusMetres": 0.38,
   "validation": "character-audit.json checks mesh bounds, floor contact, finite coordinates, scale and required joints. Movement tests cover public-area bounds, building collisions and interior access; jump tests verify floor return at different frame rates and reject an extra airborne impulse."

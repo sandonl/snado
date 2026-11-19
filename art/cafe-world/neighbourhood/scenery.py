@@ -41,6 +41,6 @@ for side in [-1,1]:
         box('Scenery low garden wall',(side*20,y,.36),(.27,8.6,.7),render_wall,.002)
         for i in range(5):sphere('Scenery garden hedge',(side*20,y-3.5+i*1.5,.9),(.65,.9,.55),scenery_green[0],1)
 # Street at each end continues into the haze, with curb edges instead of a hard void.
-for y in [-10.6,30.8]:
+for y in [-12.2,30.8]:
     box('Scenery cross street',(0,y,-.08),(87,4.8,.11),asphalt,.001)
     for offset in [-2.55,2.55]:box('Scenery cross-street curb',(0,y+offset,.04),(87,.18,.15),trim,.002)

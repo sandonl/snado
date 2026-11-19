@@ -64,8 +64,8 @@ export default function PortfolioWorld() {
   }
 
   return (
-    <main className="portfolio-world" aria-label="Explore the city">
-      <canvas ref={canvasRef} className="world-canvas" aria-label="Walk through Melbourne and Seoul. Use W A S D or arrow keys to move. Click to look with the mouse and press Escape to release it, or drag to look. Space jumps and E sits or reads nearby." tabIndex={0} />
+    <main className="portfolio-world" aria-label="Explore the neighbourhood">
+      <canvas ref={canvasRef} className="world-canvas" aria-label="Walk through the neighbourhood. Use W A S D or arrow keys to move. Click to look with the mouse and press Escape to release it, or drag to look. Space jumps and E sits or reads nearby." tabIndex={0} />
       <header className="world-header">
         <nav aria-label="World navigation">
           <button type="button" disabled={load.phase !== 'ready'} onClick={() => setPanel(value => value === 'character' ? 'none' : 'character')} aria-expanded={panel === 'character'}>Character</button>

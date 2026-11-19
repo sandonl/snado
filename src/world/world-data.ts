@@ -4,9 +4,8 @@ export type Point = { x: number; z: number }
 export type Obstacle = { minX: number; maxX: number; minZ: number; maxZ: number }
 
 export const discoveries = [
-  { id: 'coffee', title: 'Coffee & cafés', origin: 'Melbourne cafés', body: 'I’m Sandon, a software engineer living in Melbourne. I enjoy coffee and visiting cafés. This neighbourhood brings together the Melbourne laneways and Seoul workshops that inspired this site.', href: '/', linkLabel: 'More about me', ...layout.points.coffee },
-  { id: 'writing', title: 'Writing', origin: 'The laneway bookshop', body: 'Notes on building software, working with AI, and what I’m learning along the way.', href: '/posts', linkLabel: 'Read my writing', ...layout.points.writing },
-  { id: 'building', title: 'What I build', origin: 'Mullae workshop café', body: 'I work on AI and software at Tilt Legal, building tools for legal professionals. Here’s one example: using Effect to review thousands of agreements.', href: '/posts/how-we-used-effect-ts-to-review-1000s-of-agreements', linkLabel: 'Read the project story', ...layout.points.building },
+  { id: 'writing', title: 'Writing', origin: 'The print room', body: 'Notes on building software, working with AI, and what I’m learning along the way.', href: '/posts', linkLabel: 'Read my writing', ...layout.points.writing },
+  { id: 'building', title: 'What I build', origin: 'The workshop café', body: 'I work on AI and software at Tilt Legal, building tools for legal professionals. Here’s one example: using Effect to review thousands of agreements.', href: '/posts/how-we-used-effect-ts-to-review-1000s-of-agreements', linkLabel: 'Read the project story', ...layout.points.building },
 ] as const
 
 export type Discovery = (typeof discoveries)[number]
@@ -17,6 +16,7 @@ export const obstacles: readonly Obstacle[] = layout.obstacles
 export const worldBounds = layout.bounds
 export const spawn = layout.spawn
 export const cafeRoom = layout.rooms.cafe
+export const rooms: readonly Obstacle[] = Object.values(layout.rooms)
 
 export const playerRadius = .38
 export const walkableAreas: readonly Obstacle[] = layout.walkableAreas

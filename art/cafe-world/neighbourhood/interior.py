@@ -8,7 +8,7 @@ Executed by build_neighbourhood.py in its modelling context.
 active_collection=seoul
 # Replace the shallow display counter with a real room, keeping the approved façade.
 replace_prefixes=('Visible warm inner rear wall','Reused industrial workbench top','Workbench original steel legs','Workbench steel stretcher','Counter espresso machine','Espresso machine','Counter coffee cup','Coffee grinder','Workshop wall repurposed shelf','Coffee bags on old shelf','Industrial pendant','Old enamel industrial lamp shade','Industrial lamp warm diffuser')
-for obj in list(melbourne.objects):
+for obj in list(workshop_fronts.objects):
     source_name=obj.name.removeprefix('Workshop · ')
     if obj.name.startswith('Workshop · ') and source_name.startswith(replace_prefixes):
         bpy.data.objects.remove(obj,do_unlink=True)
@@ -26,7 +26,9 @@ interior_tile=material('Interior terracotta tile','C69A6D',1)
 tile_light=material('Interior pale terracotta tile','D0AB80',1)
 leather=material('Interior cognac leather','95694B',1)
 steel_silver=material('Interior espresso brushed steel','AFB4AA',.75)
-glassware=material('Interior glassware','C1CDC1',.5)
+glassware=material('drinkware glazing','B5D7CF',.5)
+glass_edge=material('Fluted glass cut rims','A3C1BB',.5)
+crema=material('Coffee crema','CB9F6E',.8)
 bottle_green=material('Interior green bottles','5D7053',.65)
 interior_footprints=[]
 
@@ -75,15 +77,30 @@ for x in [-3.4,-1.6,.15]:rod('Interior foot rail bracket',(x,16.2,.17),(x,15.99,
 exec(compile((OUTPUT/'coffee_equipment.py').read_text(),str(OUTPUT/'coffee_equipment.py'),'exec'),globals())
 build_coffee_equipment(scene,seoul,rig)
 
-def tumbler(name,x,y,z,r=.045,h=.105):
-    vertices=[]
-    for radius,level in [(r,z),(r,z+h),(r-.006,z+h),(r-.006,z+.008)]:
-        vertices.extend((x+radius*math.cos(i*math.tau/12),y+radius*math.sin(i*math.tau/12),level) for i in range(12))
-    faces=[]
-    for ring in range(3):
-        for i in range(12):faces.append((ring*12+i,ring*12+(i+1)%12,(ring+1)*12+(i+1)%12,(ring+1)*12+i))
+def tumbler(name,x,y,z,r=.045,h=.105,has_coffee=False):
+    count=32
+    rings=[(r*.77,z,0),(r*.80,z+.009,.002),(r,z+h-.008,.0025),
+           (r,z+h,0),(r-.004,z+h,0),(r*.70,z+.010,0)]
+    vertices=[(x+(radius+flute*(index%4==0))*math.cos(index*math.tau/count),
+               y+(radius+flute*(index%4==0))*math.sin(index*math.tau/count),level)
+              for radius,level,flute in rings for index in range(count)]
+    faces=[tuple(reversed(range(count)))]
+    for band in range(len(rings)-1):
+        faces.extend((band*count+i,band*count+(i+1)%count,(band+1)*count+(i+1)%count,
+                      (band+1)*count+i) for i in range(count))
+    faces.append(tuple(range((len(rings)-1)*count,len(rings)*count)))
     mesh=bpy.data.meshes.new(name);mesh.from_pydata(vertices,[],faces)
-    return link_object(name,mesh,glassware)
+    obj=link_object(name,mesh,glassware)
+    mesh.materials.append(glass_edge)
+    for polygon in mesh.polygons:
+        if 1+count*2<=polygon.index<1+count*4:polygon.material_index=1
+    if has_coffee:
+        cylinder(name+' coffee',(x,y,z+h*.42),r*.68,h*.75,coffee,24,top_radius=r*.82)
+        cylinder(name+' crema',(x,y,z+h*.802),r*.81,.0035,crema,24)
+    return obj
+
+for x,y,r in [(-.01,12.17,.048),(.35,12.24,.041)]:
+    tumbler('Courtyard fluted coffee glass',x,y,.836,r,.12,True)
 for row in range(3):
     for col in range(5):tumbler('Interior rinsed counter glass',-1.15+col*.14,16.44+row*.14,1.09)
 for x in [-.13,.09,.31]:
@@ -99,7 +116,7 @@ for x in [-3.9,-2.0]:
 for z in [1.68,2.24]:
     box('Interior rear floating shelf',(-2.85,18.1,z),(2.9,.32,.045),bar_edge,.002)
     for i in range(7):
-        if z<2: cup('Interior shelf stacked cup',-4.05+i*.38,18.06,z+.025,.56)
+        if z<2: tumbler('Interior shelf glass',-4.05+i*.38,18.06,z+.025,.036,.092)
         else:box('Interior bean bag',(-4.05+i*.38,18.12,z+.17),(.23,.13,.29),paper if i%2 else plaster_old,.002)
 box('Interior narrow cloth hanging',(.2,18.255,2.5),(.48,.012,1.28),paper,.001)
 text('Interior quiet cloth calligraphy','平\n和',(.2,18.24,2.52),.31,steel_dark,korean=True)
@@ -116,7 +133,7 @@ for y in [14.6,16.45]:
     box('Interior square cafe table top',(2.96,y,.82),(.82,.73,.045),bar_edge,.004)
     box('Interior table steel base',(2.96,y,.14),(.43,.4,.04),steel_dark,.002)
     cylinder('Interior table pedestal',(2.96,y,.48),.028,.65,steel_dark,10)
-    cup('Interior dining coffee',2.98,y,.85,.65)
+    tumbler('Interior fluted coffee glass',2.98,y,.85,.046,.12,True)
     box('Interior dining book',(2.74,y+.16,.86),(.17,.24,.025),paper,.001)
     box('Interior leather stool',(2.12,y,.34),(.44,.44,.48),leather,.004)
     interior_footprints.append((1.87,3.4,y-.42,y+.42))

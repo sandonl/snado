@@ -148,20 +148,40 @@ blob('backpackPocket',upper,(0,.245,.733),(.131,.033,.112),bag)
 for side in [-1,1]:line('backpackShoulderStrap',upper,[(side*.135,.17,.93),(side*.175,-.07,.903),(side*.178,-.137,.76),(side*.14,-.102,.625)],.015,bag)
 line('backpackPocketStitch',upper,[(-.09,.275,.76),(0,.282,.775),(.09,.275,.76)],.003,seam)
 
-# A real cup travels with the hand for the sitting/drinking action.
-cup_mat=material('cup','E4DEC9');coffee_mat=material('coffee','5E4A34')
-cup_origin=(.262,-.145,.627)
-held_cup=group('heldCup',right_hand,cup_origin)
-cup_start=set(model.objects)
-rings=[(.035,0),(.052,.10),(.046,.10),(.030,.009)];count=24
-vertices=[(cup_origin[0]+r*math.cos(i*math.tau/count),cup_origin[1]+r*math.sin(i*math.tau/count),cup_origin[2]+z) for r,z in rings for i in range(count)]
-faces=[]
-for ring in range(3):faces.extend((ring*count+i,ring*count+(i+1)%count,(ring+1)*count+(i+1)%count,(ring+1)*count+i) for i in range(count))
-faces.extend([tuple(reversed(range(count))),tuple(range(count*3,count*4))])
-mesh('cupBody',held_cup,vertices,faces,cup_mat)
-blob('cupCoffee',held_cup,(cup_origin[0],cup_origin[1],cup_origin[2]+.087),(.042,.042,.002),coffee_mat)
-line('cupHandle',held_cup,[(cup_origin[0]+.044,cup_origin[1],cup_origin[2]+.078),(cup_origin[0]+.084,cup_origin[1],cup_origin[2]+.077),(cup_origin[0]+.084,cup_origin[1],cup_origin[2]+.028),(cup_origin[0]+.038,cup_origin[1],cup_origin[2]+.028)],.006,cup_mat)
-cup_parts=set(model.objects)-cup_start
+# A handleless fluted glass travels with the hand during the drinking animation.
+glass_mat=material('fluted glass','CFE2DC')
+glass_shader=glass_mat.node_tree.nodes.get('Principled BSDF')
+glass_shader.inputs['Alpha'].default_value=.26
+glass_shader.inputs['Roughness'].default_value=.24
+glass_mat.surface_render_method='BLENDED'
+rim_mat=material('glass rim','A4C4BE')
+coffee_mat=material('coffee','835636')
+crema_mat=material('crema','D1AA7A')
+glass_origin=(.262,-.145,.627)
+# Keep the joint name shared by the runtime and resident previews.
+held_glass=group('heldCup',right_hand,glass_origin)
+drink_parts_before=set(model.objects)
+count=48
+
+def vessel(name,rings,mat,closed=True):
+    vertices=[(glass_origin[0]+(r+flute*(i%4==0))*math.cos(i*math.tau/count),
+               glass_origin[1]+(r+flute*(i%4==0))*math.sin(i*math.tau/count),
+               glass_origin[2]+z) for r,z,flute in rings for i in range(count)]
+    faces=[]
+    if closed:
+        faces.extend([tuple(reversed(range(count))),tuple(range((len(rings)-1)*count,len(rings)*count))])
+    for ring in range(len(rings)-1):
+        faces.extend((ring*count+i,ring*count+(i+1)%count,(ring+1)*count+(i+1)%count,
+                      (ring+1)*count+i) for i in range(count))
+    return mesh(name,held_glass,vertices,faces,mat)
+
+vessel('flutedGlass',[(.036,0,0),(.038,.012,.0025),(.048,.104,.003),(.048,.118,0),
+                      (.044,.118,0),(.035,.013,0)],glass_mat)
+vessel('glassFoot',[(.036,0,0),(.037,.006,0)],rim_mat)
+vessel('glassRim',[(.047,.115,0),(.048,.118,0),(.044,.118,0),(.044,.115,0),(.047,.115,0)],rim_mat,closed=False)
+vessel('coffeeFill',[(.031,.012,0),(.042,.092,0)],coffee_mat)
+blob('coffeeCrema',held_glass,(glass_origin[0],glass_origin[1],glass_origin[2]+.092),(.041,.041,.0018),crema_mat)
+drink_parts=set(model.objects)-drink_parts_before
 
 bpy.context.view_layer.update()
 # Validate the actual rig and mesh, not just the beauty render.
@@ -196,7 +216,7 @@ for obj in model.objects:
 bpy.context.view_layer.objects.active=root
 runtime=project/'public/models/cafe-walker.glb'
 bpy.ops.export_scene.gltf(filepath=str(runtime),export_format='GLB',use_selection=True,export_apply=True,export_animations=False,export_extras=False,export_draco_mesh_compression_enable=True,export_draco_mesh_compression_level=6)
-for obj in cup_parts:obj.hide_render=True
+for obj in drink_parts:obj.hide_render=True
 bpy.ops.wm.save_as_mainfile(filepath=str(folder/'cafe-walker.blend'),compress=True)
 scene.render.filepath=str(folder/'cafe-walker.png');bpy.ops.render.render(write_still=True)
 print('CAFE_WALKER_BUILT '+json.dumps(report),flush=True)

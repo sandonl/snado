@@ -1,7 +1,7 @@
 """One walkable neighbourhood, with fully modelled building exteriors.
 
-The Melbourne lane opens directly into the Mullae workshop courtyard. Buildings
-retain their approved street fronts and gain backs, exposed end walls and roofs.
+The workshop courtyard connects to a tree-lined lane of shops and a print yard.
+The existing café keeps its street front, exterior shell and usable interior.
 All collision coordinates are generated with the same assembly, in glTF Y-up.
 """
 from pathlib import Path
@@ -12,8 +12,9 @@ from mathutils import Matrix
 import bmesh
 import json
 
-scene.name='Sandon · One neighbourhood · Melbourne and Mullae'
-melbourne.name='01 · Street fronts and existing structure'
+scene.name='Sandon · Neighbourhood'
+workshop_fronts=melbourne  # First collection from the shared modelling helpers.
+workshop_fronts.name='01 · Workshop fronts'
 seoul.name='02 · Complete rear façades and roof structure'
 street.name='03 · Shared lane and workshop courtyard'
 rig.name='04 · Watercolour preview rig'
@@ -24,7 +25,7 @@ render_wall=material('Neighbourhood patched render','B6AE98',1)
 roof_metal=material('Neighbourhood roof zinc','89958E',1)
 shift_y=14.0
 
-def copy_study(relative_path,offset,omit_lane_end=False):
+def copy_study(relative_path,offset):
     with bpy.data.libraries.load(str(OUTPUT.parent/relative_path),link=False) as (available,loaded):
         loaded.scenes=[next(name for name in available.scenes if name.startswith('Sandon ·'))]
     original_scene=loaded.scenes[0]
@@ -38,11 +39,14 @@ def copy_study(relative_path,offset,omit_lane_end=False):
             if original.as_pointer() in seen:continue
             seen.add(original.as_pointer())
             if original.hide_render or original.hide_viewport or original.type not in {'MESH','CURVE','FONT'}:continue
-            if original.name.startswith(('Continuous old street','Thin uneven café apron','Lane paving bed')):continue
-            if omit_lane_end and original.name.startswith('Lane end'):continue
+            if original.name.startswith(('Continuous old street','Thin uneven café apron','Street coffee cup','Street second coffee cup')):continue
             obj=original.copy()
-            obj.name=('Lane · ' if omit_lane_end else 'Workshop · ')+original.name
-            melbourne.objects.link(obj)
+            obj.name='Workshop · '+original.name.replace('Mullae corner plaque','Neighbourhood plaque')
+            if obj.type=='FONT' and ('문래' in original.data.body or 'mullae' in original.data.body.lower()):
+                obj.data=original.data.copy()
+                obj.data.body=obj.data.body.replace('문래동','골목길').replace('문래 ','').replace('문래','골목')
+                if 'mullae' in obj.data.body.lower():obj.data.body='SIDE STREET'
+            workshop_fronts.objects.link(obj)
             obj.matrix_world=Matrix.Translation(offset)@original.matrix_world
             if obj.type=='MESH' and 'reflection' in original.name:
                 obj.data=original.data.copy()
@@ -52,15 +56,14 @@ def copy_study(relative_path,offset,omit_lane_end=False):
     bpy.context.view_layer.update()
     return original_scene
 
-copy_study('melbourne-lane/melbourne-lane.blend',(0,0,0),True)
 copy_study('mullae-lettering-v05/mullae-lettering-v05.blend',(0,shift_y,0))
 active_collection=seoul
 
 def wall_window(name,x,y,z,width,height,yaw=0,frame=iron):
-    before=set(seoul.objects)
+    before=set(active_collection.objects)
     front_window(name,0,0,z,width,height,frame)
     transform=Matrix.Translation((x,y,0))@Matrix.Rotation(yaw,4,'Z')
-    for obj in set(seoul.objects)-before:
+    for obj in set(active_collection.objects)-before:
         # These are freshly created objects: use their local transform directly,
         # rather than a world matrix that has not yet been evaluated.
         obj.matrix_world=transform@obj.matrix_basis.copy()
@@ -69,13 +72,13 @@ def wall_window(name,x,y,z,width,height,yaw=0,frame=iron):
             obj.data.update()
 
 def service_door(name,x,y,yaw=0,width=.82):
-    before=set(seoul.objects)
+    before=set(active_collection.objects)
     box(name+' metal frame',(0,-.04,1.13),(width+.1,.08,2.18),iron,.003)
     box(name+' painted panel',(0,-.086,1.13),(width,.018,2.07),green,.003)
     for z in [.45,1.82]:box(name+' pressed metal seam',(0,-.099,z),(width-.13,.014,.025),iron,.001)
     rod(name+' handle',(width*.3,-.12,1.02),(width*.3,-.12,1.25),.011,ivory,7)
     transform=Matrix.Translation((x,y,0))@Matrix.Rotation(yaw,4,'Z')
-    for obj in set(seoul.objects)-before:obj.matrix_world=transform@obj.matrix_basis.copy()
+    for obj in set(active_collection.objects)-before:obj.matrix_world=transform@obj.matrix_basis.copy()
 
 def tapered_wall(name,x0,x1,y0,y1,bottom,top0,top1,mat):
     vertices=[(x0,y0,bottom),(x1,y0,bottom),(x1,y1,bottom),(x0,y1,bottom),(x0,y0,top0),(x1,y0,top0),(x1,y1,top1),(x0,y1,top1)]
@@ -84,36 +87,10 @@ def tapered_wall(name,x0,x1,y0,y1,bottom,top0,top1,mat):
     normals=bmesh.new();normals.from_mesh(mesh);bmesh.ops.recalc_face_normals(normals,faces=list(normals.faces));normals.to_mesh(mesh);normals.free()
     return link_object(name,mesh,mat)
 
-# Exposed backs of all six lane buildings, with doors, windows and roof equipment.
-frontages=[(-1,-3.5,4.2,5.35),(-1,.9,4.35,6.25),(-1,5.35,4.25,4.35),(1,-3.5,4.2,4.8),(1,.9,4.35,6.45),(1,5.35,4.25,4.55)]
-for index,(side,y,width,height) in enumerate(frontages):
-    back_x=side*6.24
-    yaw=side*math.pi/2 # outward normal on the service lane, opposite the café front
-    service_door('Lane rear service door '+str(index),back_x,y,yaw)
-    for window_y in [y-width*.27,y+width*.27]:
-        for z in [2.05,4.25,6.42,8.55]:
-            if z+.82>height:continue
-            wall_window('Lane rear sash '+str(index),back_x,window_y,z,.83,1.3,yaw)
-    box('Lane roof west parapet',(side*4.06-width/2,y,height+.2),(.12,width,.36),trim,.003)
-    box('Lane roof east parapet',(side*4.06+width/2,y,height+.2),(.12,width,.36),trim,.003)
-    box('Lane roof rear parapet',(side*6.16,y,height+.2),(.12,width,.36),trim,.003)
-    box('Lane roof plant enclosure',(side*4.55,y+.6,height+.29),(.9,.72,.52),roof_metal,.004)
-    for i in range(5):box('Roof plant ventilation slit',(side*4.55-.31+i*.15,y+.23,height+.29),(.07,.015,.28),iron,0)
-    curve('Lane rear rainwater pipe',[(back_x+side*.07,y+width*.4,height),(back_x+side*.07,y+width*.4,.4),(back_x+side*.15,y+width*.4,.12)],.024,trim)
-
-# Street-facing end walls and courtyard-facing ends are actual façades too.
-for side in [-1,1]:
-    for y,yaw in [(-5.65,0),(7.52,math.pi)]:
-        height=next(height for building_side,building_y,width,height in frontages if building_side==side and building_y==(-3.5 if y<0 else 5.35))
-        for x in [side*3.0,side*5.05]:
-            for z in [1.62,4.24,6.4]:
-                if z+.75<height:wall_window('Lane exposed end sash',x,y,z,.92,1.35,yaw)
-        service_door('Lane corner service entry',side*4.05,y,yaw)
-    for y in [-1.34,3.15]:
-        height=min(height for building_side,building_y,width,height in frontages if building_side==side and abs(building_y-y)<2.6)
-        box('Sealed lane party wall gap',(side*4.08,y,height/2),(4.32,.17,height),render_wall,.002)
+exec(compile((OUTPUT/'workshop_lane.py').read_text(),str(OUTPUT/'workshop_lane.py'),'exec'),globals())
 
 # Close the warehouse's eave gaps with proper wall headers beneath the sloping roof.
+active_collection=seoul
 def cafe_roof(y):return 4.16+math.sin(.045)*(y-1.71)-.025
 tapered_wall('Café east full window header',4.46,4.64,12.95,18.45,2.9,cafe_roof(-1.05),cafe_roof(4.45),render_wall)
 tapered_wall('Café west roof closure',-4.58,-4.4,12.95,18.45,3.7,cafe_roof(-1.05),cafe_roof(4.45),render_wall)
@@ -181,9 +158,11 @@ exec(compile((OUTPUT/'utilities.py').read_text(),str(OUTPUT/'utilities.py'),'exe
 install_utilities(scene,street)
 exec(compile((OUTPUT/'scenery.py').read_text(),str(OUTPUT/'scenery.py'),'exec'),globals())
 
-layout={'spawn':{'x':0,'z':8.8},'bounds':{'minX':-12.5,'maxX':13,'minZ':-29,'maxZ':10.5},'points':{'coffee':{'x':-.4,'z':3.8},'writing':{'x':.4,'z':-.9},'building':{'x':-2.5,'z':-15.0}},'obstacles':[]}
-def barrier(x0,x1,y0,y1):layout['obstacles'].append({'minX':x0,'maxX':x1,'minZ':-y1,'maxZ':-y0})
-barrier(-6.3,-1.92,-5.65,7.53);barrier(1.92,6.3,-5.65,7.53)
+layout={'spawn':{'x':0,'z':8.8},'bounds':{'minX':-12.5,'maxX':13,'minZ':-29,'maxZ':10.5},'points':{'writing':{'x':4.3,'z':.3},'building':{'x':-2.5,'z':-15.0}},'obstacles':[]}
+def walking_box(x0,x1,y0,y1):
+    return {'minX':x0,'maxX':x1,'minZ':-y1,'maxZ':-y0}
+def barrier(x0,x1,y0,y1):layout['obstacles'].append(walking_box(x0,x1,y0,y1))
+for footprint in workshop_footprints:barrier(*footprint)
 barrier(-4.6,-4.39,12.95,18.53);barrier(-4.6,4.66,18.32,18.62);barrier(4.45,4.72,12.95,18.53)
 barrier(-1.18,4.62,12.78,13.1);barrier(-4.38,-3.75,12.88,13.04);barrier(-1.76,-1.12,12.88,13.04)
 for footprint in interior_footprints:barrier(*footprint)
@@ -192,13 +171,14 @@ barrier(-9.6,-9.4,13.02,17.65);barrier(-4.78,-4.6,13.02,17.65);barrier(-9.6,-4.6
 barrier(-8.5,-5.6,14.98,15.9)
 barrier(-4.44,1.94,18.4,22.22);barrier(7.47,11.16,14.84,21.84);barrier(4.34,7.66,24.05,26.2)
 barrier(-.38,.7,11.65,12.7);barrier(2.8,4.0,11.9,12.4)
-for side,y,width,height in frontages:
-    if side<0:barrier(-1.8,-.85,y-1.7,y+.17)
-    else:barrier(.85,1.8,y+.13,y+1.7)
 layout['rooms']={'cafe':{'minX':-4.3,'maxX':4.3,'minZ':-18.3,'maxZ':-13.05}}
 exec(compile((OUTPUT/'play_area.py').read_text(),str(OUTPUT/'play_area.py'),'exec'),globals())
 play_details=install_play_area(scene,street,OUTPUT)
 apply_layout(layout,play_details)
+layout['rooms'].update({name:walking_box(*room) for name,room in shop_rooms.items()})
+layout['walkableAreas'].extend(walking_box(*area) for area in [*shop_rooms.values(),*shop_portals])
+layout['bounds']['minX']=min(area['minX'] for area in layout['walkableAreas'])
+layout['bounds']['maxX']=max(area['maxX'] for area in layout['walkableAreas'])
 layout_path=OUTPUT.parents[2]/'src'/'world'/'layout.json'
 layout_path.write_text(json.dumps(layout,indent=2)+'\n')
 
@@ -212,9 +192,12 @@ def camera(name,position,target,lens):
     data=bpy.data.cameras.new(name);data.lens=lens
     obj=link_object(name,data);obj.location=position;obj.rotation_euler=(Vector(target)-obj.location).to_track_quat('-Z','Y').to_euler()
     return obj
-scene.camera=camera('Lane into workshop courtyard',(.15,-9.1,2.1),(0,14,2.55),24)
+scene.camera=camera('Lane into workshop courtyard',(.35,-12.8,2.68),(-.12,8.0,3.85),21)
 camera('Rear building inspection',(12,29.1,2.4),(0,17,4.2),28)
 camera('Café interior at eye level',(-2.7,13.9,1.66),(-.6,17.2,1.75),22)
+camera('Restaurant dining room',(-4.03,-2.19,1.58),(-5.59,-4.51,1.15),23)
+camera('Market shop floor',(3.77,-4.75,1.61),(5.87,-3.47,1.25),23)
+camera('Ceramics studio workbench',(-3.47,.46,1.61),(-5.67,-.64,1.10),23)
 camera('Quiet tiled seating',(3.4,14.0,1.64),(.3,17.2,1.6),22)
 scenery_view=camera('Street and distant scenery',(-11,-8,2.2),(-14,20,4.3),28)
 overview=camera('Neighbourhood overview',(25,-22,31),(0,10,1.8),40)
@@ -230,7 +213,7 @@ exec(illustration_code,globals())
 # Unlike the old opaque façade studies, these panes can be seen through from
 # both inside and outside. The solid mullions and wall shell remain separate.
 for mat in bpy.data.materials:
-    if 'small old glass panes' not in mat.name:continue
+    if not any(label in mat.name for label in ('small old glass panes','shop display glazing','drinkware glazing')):continue
     nodes=mat.node_tree.nodes;links=mat.node_tree.links
     output=next(node for node in nodes if node.type=='OUTPUT_MATERIAL')
     clear=nodes.new('ShaderNodeBsdfTransparent');clear.inputs['Color'].default_value=(.91,.96,.92,1)
@@ -246,8 +229,8 @@ letters=bpy.data.collections.new('05 · Lettering');scene.collection.children.li
 for obj in scene.objects:
     if obj.type=='FONT':letters.objects.link(obj)
 lines.select_by_collection=True;lines.collection=letters;lines.collection_negation='EXCLUSIVE'
-scene['layout']='One lane and courtyard, with walkable perimeter service streets. Melbourne and Mullae architecture share the same physical block.'
-scene['buildingScope']='Fully modelled exteriors and roof enclosures. Workshop café includes an enterable bar and tiled seating area; other closed buildings have complete exteriors.'
+scene['layout']='One lane and courtyard, with walkable perimeter service streets. Tree-lined shopfronts, print yard and workshop café share one walkable block.'
+scene['buildingScope']='Fully modelled exteriors and roof enclosures. Workshop café includes an enterable bar and tiled seating area; the restaurant, market and ceramics studio have walk-in interiors.'
 for other in list(bpy.data.scenes):
     if other!=scene:bpy.data.scenes.remove(other)
 bpy.context.preferences.filepaths.save_version=0

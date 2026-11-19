@@ -1,7 +1,12 @@
 {
   "passed": true,
-  "probeCount": 37,
+  "probeCount": 35,
   "probes": [
+    {
+      "name": "Arrival lane stays clear at walking height",
+      "passed": true,
+      "hit": null
+    },
     {
       "name": "Lane opens into the shared courtyard",
       "passed": true,
@@ -38,84 +43,69 @@
       "hit": "Workshop \u00b7 Old low workshop roof sheet"
     },
     {
-      "name": "Lane building 0 rear surface",
+      "name": "Fabrication lane opens into the print yard",
       "passed": true,
-      "hit": "Lane rear service door 0 painted panel"
+      "hit": null
     },
     {
-      "name": "Lane building 0 roof",
+      "name": "Print room display has a window",
       "passed": true,
-      "hit": "Lane \u00b7 Morrow upper cornice"
+      "hit": "Print room display glazing"
     },
     {
-      "name": "Lane building 1 rear surface",
+      "name": "Restaurant timber shopfront faces the arrival street",
       "passed": true,
-      "hit": "Lane rear service door 1 painted panel"
+      "hit": "Corner restaurant street front display upright.002"
     },
     {
-      "name": "Lane building 1 roof",
+      "name": "Restaurant windows look into the room",
       "passed": true,
-      "hit": "Lane \u00b7 Editions upper cornice"
+      "hit": null
     },
     {
-      "name": "Lane building 2 rear surface",
+      "name": "Restaurant has an open lane entrance",
       "passed": true,
-      "hit": "Lane rear service door 2 painted panel"
+      "hit": null
     },
     {
-      "name": "Lane building 2 roof",
+      "name": "Market has an open lane entrance",
       "passed": true,
-      "hit": "Lane \u00b7 North upper cornice"
+      "hit": null
     },
     {
-      "name": "Lane building 3 rear surface",
+      "name": "Studio has an open lane entrance",
       "passed": true,
-      "hit": "Lane rear service door 3 painted panel"
+      "hit": null
     },
     {
-      "name": "Lane building 3 roof",
+      "name": "Restaurant has a set dining table",
       "passed": true,
-      "hit": "Lane \u00b7 Coda upper cornice"
+      "hit": "Restaurant set plate.001"
     },
     {
-      "name": "Lane building 4 rear surface",
+      "name": "Market has a checkout inside",
       "passed": true,
-      "hit": "Lane rear service door 4 painted panel"
+      "hit": "Market till"
     },
     {
-      "name": "Lane building 4 roof",
+      "name": "Studio has a potter\u2019s wheel",
       "passed": true,
-      "hit": "Lane \u00b7 Market upper cornice"
+      "hit": "Studio clay bowl on wheel"
     },
     {
-      "name": "Lane building 5 rear surface",
+      "name": "Market canvas projects above the footway",
       "passed": true,
-      "hit": "Lane rear service door 5 painted panel"
+      "hit": "Corner market street front striped awning.005"
     },
     {
-      "name": "Lane building 5 roof",
+      "name": "Metal cutting shop keeps its roller shutter",
       "passed": true,
-      "hit": "Lane \u00b7 Studio upper cornice"
+      "hit": "Metal cutting shop roller shutter"
     },
     {
-      "name": "Entry end has actual window geometry",
+      "name": "Arrival street tree is rooted in the footway",
       "passed": true,
-      "hit": "Lane exposed end sash centre mullion"
-    },
-    {
-      "name": "Outer rear has actual window geometry",
-      "passed": true,
-      "hit": "Lane rear sash 0 centre mullion"
-    },
-    {
-      "name": "Entry end has actual window geometry",
-      "passed": true,
-      "hit": "Lane exposed end sash centre mullion.006"
-    },
-    {
-      "name": "Outer rear has actual window geometry",
-      "passed": true,
-      "hit": "Lane rear sash 3 centre mullion"
+      "hit": "Lane canopy tree trunk"
     },
     {
       "name": "Rear brick block rear",
@@ -192,5 +182,5 @@
       "normalY": 1.0
     }
   ],
-  "scope": "Actual saved Blender geometry: connector and caf\u00e9 entrance clear; sampled side/rear surfaces, eave closures and roofs present; coffee equipment operating faces checked from the staff aisle. This does not claim furnished interiors behind closed doors."
+  "scope": "Actual saved Blender geometry: lane, print yard and caf\u00e9 entrance clear; sampled side/rear surfaces, eave closures and roofs present; coffee equipment operating faces checked from the staff aisle. This does not claim furnished interiors behind closed doors."
 }

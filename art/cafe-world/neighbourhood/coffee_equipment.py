@@ -24,7 +24,7 @@ def build_coffee_equipment(scene, collection, camera_collection):
         mat.use_nodes=True
         nodes=mat.node_tree.nodes;links=mat.node_tree.links
         output=nodes.get('Material Output')
-        if 'hopper glazing' in name:
+        if 'glazing' in name:
             clear=nodes.new('ShaderNodeBsdfTransparent')
             clear.inputs['Color'].default_value=(.94,.97,.95,1)
             tint=nodes.new('ShaderNodeBsdfDiffuse');tint.inputs['Color'].default_value=mat.diffuse_color
@@ -52,6 +52,7 @@ def build_coffee_equipment(scene, collection, camera_collection):
     dark=material('recessed grille shadows','59615B')
     led=material('quiet green indicator','9DAE8E')
     glass=material('hopper glazing','BACCC3')
+    drinking_glass=material('drinkware glazing','BAD6CD')
     bean=material('roasted coffee beans','625344')
     root=None
 
@@ -91,16 +92,22 @@ def build_coffee_equipment(scene, collection, camera_collection):
         obj=bpy.data.objects.new('Coffee equipment · '+name,data);collection.objects.link(obj);obj.parent=root;data.materials.append(mat)
         return obj
 
-    def cup(name,x,y,z):
+    def serving_glass(name,x,y,z,filled):
         count=24
-        rings=[(.027,z),(.038,z+.066),(.033,z+.066),(.023,z+.008)]
-        vertices=[(x+r*math.cos(i*math.tau/count),y+r*math.sin(i*math.tau/count),level) for r,level in rings for i in range(count)]
-        faces=[]
-        for ring in range(3):
-            faces.extend((ring*count+i,ring*count+(i+1)%count,(ring+1)*count+(i+1)%count,(ring+1)*count+i) for i in range(count))
-        faces.extend([tuple(reversed(range(count))),tuple(range(count*3,count*4))])
-        mesh(name+' hollow porcelain',vertices,faces,white)
-        curve(name+' loop handle',[(x+.033,y,z+.052),(x+.061,y,z+.05),(x+.061,y,z+.023),(x+.031,y,z+.02)],.005,white)
+        rings=[(.025,z,0),(.026,z+.007,.002),(.036,z+.060,.002),(.036,z+.070,0),
+               (.032,z+.070,0),(.022,z+.007,0)]
+        vertices=[(x+(r+groove*(i%3==0))*math.cos(i*math.tau/count),
+                   y+(r+groove*(i%3==0))*math.sin(i*math.tau/count),level)
+                  for r,level,groove in rings for i in range(count)]
+        faces=[tuple(reversed(range(count))),tuple(range((len(rings)-1)*count,len(rings)*count))]
+        for band in range(len(rings)-1):
+            faces.extend((band*count+i,band*count+(i+1)%count,(band+1)*count+(i+1)%count,
+                          (band+1)*count+i) for i in range(count))
+        vessel=mesh(name,vertices,faces,drinking_glass)
+        vessel.data.materials.append(chrome)
+        for face in vessel.data.polygons:
+            if 2+2*count<=face.index<2+4*count:face.material_index=1
+        if filled:cylinder(name+' espresso',(x,y,z+.027),.022,.040,bean,20,top_radius=.029)
 
     root=bpy.data.objects.new('Coffee equipment · two-group espresso machine',None);collection.objects.link(root)
     root.location=(-2.82,16.62,1.085)
@@ -138,10 +145,12 @@ def build_coffee_equipment(scene, collection, camera_collection):
         box('espresso operator status light',(x,.271,.39),(.018,.006,.005),led,.0005)
         cylinder('espresso group brass collar',(x,.23,.292),.061,.042,brass,24)
         cylinder('espresso group chrome head',(x,.25,.259),.055,.031,chrome,24)
-        cylinder('espresso portafilter basket',(x,.26,.231),.043,.026,steel,24,top_radius=.052)
-        rod('espresso portafilter neck',(x,.278,.242),(x+.025,.345,.242),.012,chrome)
-        rod('espresso operator portafilter handle',(x+.025,.345,.242),(x+.04,.458,.235),.016,rubber)
-        for dx in [-.019,.019]:curve('espresso twin brew spout',[(x+dx,.26,.219),(x+dx,.27,.208),(x+dx,.282,.205)],.005,chrome)
+        # The right group receives the animated portafilter and glass in Explore.
+        if x<0:
+            cylinder('espresso portafilter basket',(x,.26,.231),.043,.026,steel,24,top_radius=.052)
+            rod('espresso portafilter neck',(x,.278,.242),(x+.025,.345,.242),.012,chrome)
+            rod('espresso operator portafilter handle',(x+.025,.345,.242),(x+.04,.458,.235),.016,rubber)
+            for dx in [-.019,.019]:curve('espresso twin brew spout',[(x+dx,.26,.219),(x+dx,.27,.208),(x+dx,.282,.205)],.005,chrome)
     gauge=cylinder('espresso operator pressure gauge bezel',(0,.269,.406),.043,.012,chrome,32);gauge.rotation_euler.x=math.pi/2
     face=cylinder('espresso operator pressure gauge enamel',(0,.277,.406),.036,.004,white,32);face.rotation_euler.x=math.pi/2
     for i in range(9):
@@ -160,14 +169,14 @@ def build_coffee_equipment(scene, collection, camera_collection):
     box('espresso drip tray rim front',(0,.451,.075),(.82,.015,.03),chrome)
     for x in [-.404,.404]:box('espresso drip tray rim end',(x,.302,.075),(.012,.296,.03),chrome)
     for i in range(25):box('espresso drip tray grate bar',(-.372+i*.031,.303,.074),(.012,.275,.012),steel,.0006)
-    for x in [-.195,.195]:cup('espresso serving cup',x,.305,.082)
-    # Warming deck and restrained steel cup rail, with genuinely hollow empty cups.
-    box('espresso cup warming deck',(0,-.014,.495),(.77,.35,.015),chrome,.002)
+    serving_glass('espresso fluted serving glass',-.195,.305,.082,True)
+    # Warming deck and restrained steel cup rail, with hollow empty glasses.
+    box('espresso glass warming deck',(0,-.014,.495),(.77,.35,.015),chrome,.002)
     for x in [-.37,.37]:
         for y in [-.17,.12]:rod('espresso warming rail stanchion',(x,y,.507),(x,y,.557),.004,chrome,8)
         rod('espresso warming side rail',(x,-.17,.557),(x,.12,.557),.004,chrome,8)
     rod('espresso warming rear rail',(-.37,-.17,.557),(.37,-.17,.557),.004,chrome,8)
-    for x in [-.22,0,.22]:cup('espresso warming cup',x,-.035,.508)
+    for x in [-.22,0,.22]:serving_glass('espresso fluted warming glass',x,-.035,.508,False)
 
     for x in [-3.51,-2.04]:
         root=bpy.data.objects.new('Coffee equipment · burr grinder',None);collection.objects.link(root);root.location=(x,16.62,1.085)

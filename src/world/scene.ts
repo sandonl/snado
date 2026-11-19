@@ -1,10 +1,11 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
-import { discoveries, moveThroughWorld, obstacles, spawn, cafeRoom, seats, residents, type Seat, type SeatId, type DiscoveryId } from './world-data'
+import { discoveries, moveThroughWorld, obstacles, spawn, cafeRoom, rooms, seats, residents, type Seat, type SeatId, type DiscoveryId } from './world-data'
 import { watercolourMaterial } from './watercolour'
 import { loadWalker, characterPalettes, type Walker, type CharacterPaletteId } from './character'
 import { advanceJump, groundedJump, startJump, type JumpState } from './jump'
+import { createBarista } from './barista'
 
 export type MoveAction = 'forward' | 'backward' | 'left' | 'right'
 export type Activity = 'walking' | 'seated' | 'transitioning'
@@ -63,9 +64,12 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   scene.add(avatar)
   avatar.position.set(spawn.x, -.015, spawn.z)
   let walker: Walker | null = null
+  let barista: ReturnType<typeof createBarista> | null = null
   const characterReady = loadWalker(loader).then(value => {
     walker = value
     avatar.add(value.root)
+    barista = createBarista(value)
+    scene.add(barista.root)
     for (const resident of residents) {
       const person = value.clone()
       const palette = characterPalettes.find(value => value.id === resident.palette)
@@ -250,8 +254,12 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
   canvas.addEventListener('pointercancel', pointerUp)
   callbacks.onMouseLook(mouseLockAvailable ? 'click' : 'drag')
 
+  function roomAt(x: number, z: number) {
+    return rooms.find(room => x > room.minX && x < room.maxX && z > room.minZ && z < room.maxZ)
+  }
   function floorHeight(x: number, z: number) {
-    return x > cafeRoom.minX && x < cafeRoom.maxX && z > cafeRoom.minZ && z < cafeRoom.maxZ ? .065 : -.015
+    const room = roomAt(x, z)
+    return room === cafeRoom ? .065 : room ? .02 : -.015
   }
   function jump() {
     if (loaded && !paused && posture.kind === 'walking') jumpState = startJump(jumpState)
@@ -305,7 +313,7 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
       avatar.position.y = floorHeight(avatar.position.x, avatar.position.z) + jumpState.height
 
     }
-    const insideCafe = avatar.position.x > cafeRoom.minX && avatar.position.x < cafeRoom.maxX && avatar.position.z > cafeRoom.minZ && avatar.position.z < cafeRoom.maxZ
+    const room = roomAt(avatar.position.x, avatar.position.z)
     if (walker) {
       if (posture.kind === 'walking') walker.animate({ kind: 'standing', stride, isWalking, airborne: jumpState.phase === 'airborne' }, dt, timer.getElapsed())
       else {
@@ -330,9 +338,10 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
       }
     }
     for (const person of people) person.walker.animate({ kind: 'seated', elapsed: timer.getElapsed() + person.offset, amount: 1 }, dt, timer.getElapsed() + person.offset)
+    barista?.animate(timer.getElapsed(), dt)
     focus.copy(avatar.position); focus.y += 1.15
     const isSeated = posture.kind !== 'walking'
-    const followDistance = insideCafe ? 2.7 : isSeated ? 3.8 : 6.8
+    const followDistance = room ? 2.7 : isSeated ? 3.8 : 6.8
     // Look across the table when seated, so the opposite chair doesn't hide the player.
     const cameraYaw = yaw + (isSeated ? .5 : 0)
     offset.set(Math.sin(cameraYaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(cameraYaw) * Math.cos(pitch)).multiplyScalar(followDistance)
@@ -348,7 +357,7 @@ export function createWorld(canvas: HTMLCanvasElement, callbacks: Callbacks) {
     camera.position.copy(cameraPosition); camera.lookAt(focus)
     // Tight corners become a clear first-person view instead of the inside of a head.
     avatar.visible = camera.position.distanceTo(focus) > 1.25
-    shadow.position.set(avatar.position.x, insideCafe ? .117 : .043, avatar.position.z)
+    shadow.position.set(avatar.position.x, room === cafeRoom ? .117 : room ? .075 : .043, avatar.position.z)
     renderer.render(scene, camera)
   })
 
